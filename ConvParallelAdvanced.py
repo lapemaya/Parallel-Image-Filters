@@ -86,7 +86,9 @@ def apply_convolution(img_arr, kernel, normalize=False, n_jobs=-1, block_size=No
                          start_i, end_i, start_j, end_j, c))
 
     # Process all blocks for all channels in parallel simultaneously
-    results = Parallel(n_jobs=n_jobs)(
+    results = Parallel(n_jobs=n_jobs,
+                       max_nbytes=None,  # Limita uso memoria (invece di None)
+                        temp_folder='/tmp')(  # Usa directory temporanea esplicita)(
         delayed(process_block_channel)(
             channel, kernel_flipped, kh, kw, start_i, end_i, start_j, end_j, c
         ) for channel, kernel_flipped, kh, kw, start_i, end_i, start_j, end_j, c in tasks
@@ -100,9 +102,9 @@ def apply_convolution(img_arr, kernel, normalize=False, n_jobs=-1, block_size=No
 
 if __name__ == "__main__":
     # Configuration
-    input_path = "banana.png"
-    output_path = "output_parallel_advanced.jpg"
-    kernel = KERNEL_EDGE
+    input_path = "place.png"
+    output_path = "output_parallel_advanced.png"
+    kernel = KERNEL_BLUR
     normalize = True
     n_jobs = -1  # -1 uses all available cores
     block_size = None  # None = automatic, or set manually (e.g., 128, 256)

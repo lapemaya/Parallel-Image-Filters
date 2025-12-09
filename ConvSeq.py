@@ -52,7 +52,7 @@ def apply_convolution(img_arr, kernel, normalize=False):
 
 if __name__ == "__main__":
     # Configuration
-    input_path = "banana.png"
+    input_path = "place.png"
     output_path = "output.jpg"
     kernel = KERNEL_EDGE
     normalize = True

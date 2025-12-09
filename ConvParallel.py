@@ -84,13 +84,20 @@ def apply_convolution(img_arr, kernel, normalize=False, n_jobs=-1, block_size=No
             end_j = min(j + block_size, out_w)
             blocks.append((i, end_i, j, end_j))
 
+    print(f"Number of blocks per channel: {len(blocks)}")
+    print(f"Total parallel tasks per channel: {len(blocks)}")
+    print(f"Processing channels sequentially (3 channels)")
+    print(f"Block size: {block_size}x{block_size}")
+
     # Pre-allocate output array
     out = np.zeros((out_h, out_w, 3), dtype=np.uint8)
 
     # Process each channel
     for c in range(3):
         # Process all blocks for this channel in parallel
-        results = Parallel(n_jobs=n_jobs)(
+        results = Parallel(n_jobs=n_jobs,
+                           max_nbytes=None,
+                           temp_folder='/tmp')(
             delayed(process_block)(
                 img_float[:,:,c], kernel_flipped, kh, kw,
                 start_i, end_i, start_j, end_j

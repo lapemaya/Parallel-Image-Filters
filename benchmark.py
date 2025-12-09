@@ -25,7 +25,7 @@ def benchmark_convolution(img_path, kernel, normalize=True, n_runs=3):
     print(f"CPU cores: {multiprocessing.cpu_count()}")
     print("=" * 70)
 
-    results = {}
+    results={}
 
     # Benchmark sequential version
     print("\n1. SEQUENTIAL VERSION")
@@ -33,7 +33,8 @@ def benchmark_convolution(img_path, kernel, normalize=True, n_runs=3):
     times_seq = []
     for i in range(n_runs):
         start = time.time()
-        result_seq = ConvSeq.apply_convolution(arr, kernel, normalize=normalize)
+        #result_seq = ConvSeq.apply_convolution(arr, kernel, normalize=normalize)
+        result_seq=None
         elapsed = time.time() - start
         times_seq.append(elapsed)
         print(f"Run {i+1}: {elapsed:.4f} seconds")
@@ -109,10 +110,10 @@ def benchmark_convolution(img_path, kernel, normalize=True, n_runs=3):
 
 if __name__ == "__main__":
     # Configuration
-    input_path = "banana.png"
+    input_path = "place.png"
     kernel = ConvSeq.KERNEL_EDGE
     normalize = True
-    n_runs = 3
+    n_runs = 1
 
     print("=" * 70)
     print("CONVOLUTION BENCHMARK: Sequential vs Parallel Versions")
