@@ -68,6 +68,7 @@ def apply_convolution(img_arr, kernel, normalize=False, n_jobs=-1, block_size=No
     if normalize:
         s = kernel.sum()
         if s != 0:
+    # Clean up shared memory reference
             kernel = kernel / s
 
     # Pre-flip kernel once
@@ -88,8 +89,8 @@ def apply_convolution(img_arr, kernel, normalize=False, n_jobs=-1, block_size=No
         # Default: divide image into blocks based on available cores
         n_cores = multiprocessing.cpu_count() if n_jobs == -1 else n_jobs
         # Aim for ~2 blocks per core (since we also parallelize over channels)
-        total_blocks_per_channel = max(1, n_cores // 3)  # 3 channels
-        block_size = max(64, int(np.sqrt(out_h * out_w / total_blocks_per_channel)))
+        total_blocks_per_channel = max(1, n_cores*1 // 3)  # 3 channels
+        block_size = max(9, int(np.sqrt(out_h * out_w / total_blocks_per_channel)))
 
     # Create blocks coordinates
     blocks = []
