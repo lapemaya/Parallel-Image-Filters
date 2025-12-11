@@ -2,11 +2,15 @@
 """
 Advanced parallel image convolution script using joblib.
 Parallelizes both image blocks AND channels simultaneously.
+Uses shared memory to avoid pickling overhead.
 """
 import numpy as np
 from PIL import Image
 from joblib import Parallel, delayed
 import multiprocessing
+from multiprocessing import shared_memory
+import cProfile
+import pstats
 
 # Kernel presets
 KERNEL_BLUR = np.array([[1,1,1],[1,1,1],[1,1,1]], dtype=float)
@@ -15,8 +19,20 @@ KERNEL_EDGE = np.array([[-1,-1,-1],[-1,8,-1],[-1,-1,-1]], dtype=float)
 KERNEL_EMBOSS = np.array([[-2,-1,0],[-1,1,1],[0,1,2]], dtype=float)
 KERNEL_GAUSSIAN = np.array([[1,2,1],[2,4,2],[1,2,1]], dtype=float)
 
-def process_block_channel(channel, kernel_flipped, kh, kw, start_i, end_i, start_j, end_j, channel_idx):
-    """Process a single block for a single channel."""
+def process_block_channel_shm(shm_name, img_shape, dtype_str, kernel_flipped, start_i, end_i, start_j, end_j, channel_idx):
+    """Process a single block for a single channel using shared memory."""
+    # Attach to existing shared memory
+    shm = shared_memory.SharedMemory(name=shm_name)
+
+    # Reconstruct the numpy array view from shared memory
+    img_float = np.ndarray(img_shape, dtype=dtype_str, buffer=shm.buf)
+
+    # Get the channel
+    channel = img_float[:, :, channel_idx]
+
+    # Calculate kernel dimensions from the kernel itself
+    kh, kw = kernel_flipped.shape
+
     # Extract region with kernel overlap
     region_start_i = start_i
     region_end_i = end_i + kh - 1
@@ -29,13 +45,16 @@ def process_block_channel(channel, kernel_flipped, kh, kw, start_i, end_i, start
     out_h = end_i - start_i
     out_w = end_j - start_j
 
-    out = np.zeros((out_h, out_w), dtype=float)
+    out = np.zeros((out_h, out_w), dtype=np.float32)
 
     # Convolve this block
     for i in range(out_h):
         for j in range(out_w):
             window = region[i:i+kh, j:j+kw]
             out[i,j] = np.sum(window * kernel_flipped)
+
+    # Clean up shared memory reference (don't unlink, just close)
+    shm.close()
 
     return channel_idx, start_i, end_i, start_j, end_j, out
 
@@ -47,13 +66,14 @@ def apply_convolution(img_arr, kernel, normalize=False, n_jobs=-1, block_size=No
             kernel = kernel / s
 
     # Pre-flip kernel once
-    kernel_flipped = np.flipud(np.fliplr(kernel))
+    kernel_flipped = np.flipud(np.fliplr(kernel)).astype(np.float32)
 
-    # Convert to float once for all channels
-    img_float = img_arr.astype(float)
+    # Convert to float32 (half memory vs float64) and make C-contiguous
+    img_float = np.ascontiguousarray(img_arr.astype(np.float32))
 
     # Calculate output dimensions
     kh, kw = kernel.shape
+
     h, w = img_arr.shape[0], img_arr.shape[1]
     out_h = h - kh + 1
     out_w = w - kw + 1
@@ -75,52 +95,73 @@ def apply_convolution(img_arr, kernel, normalize=False, n_jobs=-1, block_size=No
             end_j = min(j + block_size, out_w)
             blocks.append((i, end_i, j, end_j))
 
-    # Pre-allocate output array
-    out = np.zeros((out_h, out_w, 3), dtype=np.uint8)
+    # Create shared memory for the input image
+    shm = shared_memory.SharedMemory(create=True, size=img_float.nbytes)
 
-    # Create all tasks (blocks × channels)
-    tasks = []
-    for c in range(3):
-        for start_i, end_i, start_j, end_j in blocks:
-            tasks.append((img_float[:,:,c], kernel_flipped, kh, kw,
-                         start_i, end_i, start_j, end_j, c))
+    # Copy image data to shared memory
+    shm_array = np.ndarray(img_float.shape, dtype=img_float.dtype, buffer=shm.buf)
+    np.copyto(shm_array, img_float)
 
-    # Process all blocks for all channels in parallel simultaneously
-    results = Parallel(n_jobs=n_jobs,
-                       max_nbytes=None,  # Limita uso memoria (invece di None)
-                        temp_folder='/tmp')(  # Usa directory temporanea esplicita)(
-        delayed(process_block_channel)(
-            channel, kernel_flipped, kh, kw, start_i, end_i, start_j, end_j, c
-        ) for channel, kernel_flipped, kh, kw, start_i, end_i, start_j, end_j, c in tasks
-    )
+    try:
+        # Pre-allocate output array
+        out = np.zeros((out_h, out_w, 3), dtype=np.float32)
 
-    # Assemble results into output array
-    for channel_idx, start_i, end_i, start_j, end_j, block_result in results:
-        out[start_i:end_i, start_j:end_j, channel_idx] = np.clip(block_result, 0, 255).astype(np.uint8)
+        # Create all tasks (blocks × channels)
+        tasks = []
+        for c in range(3):
+            for start_i, end_i, start_j, end_j in blocks:
+                tasks.append((shm.name, img_float.shape, img_float.dtype.str, kernel_flipped,
+                             start_i, end_i, start_j, end_j, c))
 
-    return out
+        # Process all blocks for all channels in parallel
+        # Use prefer="processes" to get true parallelism with shared memory (no GIL)
+        results = Parallel(n_jobs=n_jobs, prefer="processes")(
+            delayed(process_block_channel_shm)(
+                shm_name, shape, dtype_str, kernel_flipped, start_i, end_i, start_j, end_j, c
+            ) for shm_name, shape, dtype_str, kernel_flipped, start_i, end_i, start_j, end_j, c in tasks
+        )
+
+        # Assemble results into output array
+        for channel_idx, start_i, end_i, start_j, end_j, block_result in results:
+            out[start_i:end_i, start_j:end_j, channel_idx] = block_result
+
+        # Clip and convert to uint8 at the end
+        out_uint8 = np.clip(out, 0, 255).astype(np.uint8)
+
+    finally:
+        # Clean up shared memory
+        shm.close()
+        shm.unlink()
+
+    return out_uint8
 
 if __name__ == "__main__":
-    # Configuration
-    input_path = "place.png"
-    output_path = "output_parallel_advanced.png"
-    kernel = KERNEL_BLUR
-    normalize = True
-    n_jobs = -1  # -1 uses all available cores
-    block_size = None  # None = automatic, or set manually (e.g., 128, 256)
+    with cProfile.Profile() as pr:
+        # Configuration
+        input_path = "place.png"
+        output_path = "output_parallel_advanced.png"
+        kernel = KERNEL_BLUR
+        normalize = True
+        n_jobs = -1  # -1 uses all available cores
+        block_size = None  # None = automatic, or set manually (e.g., 128, 256)
 
-    # Load RGB image
-    img = Image.open(input_path).convert("RGB")
-    arr = np.array(img)
+        # Load RGB image
+        img = Image.open(input_path).convert("RGB")
+        arr = np.array(img)
 
-    print(f"Processing image: {arr.shape[0]}x{arr.shape[1]} pixels")
-    print(f"Parallelization: blocks × channels (fully parallel)")
+        print(f"Processing image: {arr.shape[0]}x{arr.shape[1]} pixels")
+        print(f"Parallelization: blocks × channels (fully parallel)")
 
-    # Apply convolution in parallel (blocks × channels simultaneously)
-    result = apply_convolution(arr, kernel, normalize=normalize, n_jobs=n_jobs, block_size=block_size)
 
-    # Save result
-    out_img = Image.fromarray(result)
-    out_img.save(output_path)
-    print(f"Saved: {output_path}")
+        # Apply convolution in parallel (blocks × channels simultaneously)
+        result = apply_convolution(arr, kernel, normalize=normalize, n_jobs=n_jobs, block_size=block_size)
+
+        # Save result
+        out_img = Image.fromarray(result)
+        out_img.save(output_path)
+        print(f"Saved: {output_path}")
+    # Print profiling results
+    stats = pstats.Stats(pr)
+    stats.sort_stats('cumtime').print_stats(10)
+
 
