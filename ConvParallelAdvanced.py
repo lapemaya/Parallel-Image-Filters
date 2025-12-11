@@ -157,9 +157,9 @@ if __name__ == "__main__":
         result = apply_convolution(arr, kernel, normalize=normalize, n_jobs=n_jobs, block_size=block_size)
 
         # Save result
-        out_img = Image.fromarray(result)
-        out_img.save(output_path)
-        print(f"Saved: {output_path}")
+        #out_img = Image.fromarray(result)
+        #out_img.save(output_path)
+        #print(f"Saved: {output_path}")
 
     # Print profiling results
     stats = pstats.Stats(pr)
