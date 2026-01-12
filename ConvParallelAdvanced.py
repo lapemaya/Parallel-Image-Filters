@@ -159,7 +159,7 @@ def apply_convolution(img_arr, kernel, normalize=False, n_jobs=-1, block_size=No
 if __name__ == "__main__":
     with cProfile.Profile() as pr:
         # Configuration
-        input_path = "place.png"
+        input_path = "/home/lapemaya/PycharmProjects/Parallel-Image-Filters/place.png"
         output_path = "output_parallel_advanced.png"
         kernel = KERNEL_GAUSSIAN_7x7
         normalize = True

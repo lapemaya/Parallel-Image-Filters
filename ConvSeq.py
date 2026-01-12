@@ -14,7 +14,23 @@ KERNEL_SHARPEN = np.array([[0,-1,0],[-1,5,-1],[0,-1,0]], dtype=float)
 KERNEL_EDGE = np.array([[-1,-1,-1],[-1,8,-1],[-1,-1,-1]], dtype=float)
 KERNEL_EMBOSS = np.array([[-2,-1,0],[-1,1,1],[0,1,2]], dtype=float)
 KERNEL_GAUSSIAN = np.array([[1,2,1],[2,4,2],[1,2,1]], dtype=float)
+KERNEL_GAUSSIAN_5x5 = np.array([
+    [1,  4,  6,  4, 1],
+    [4, 16, 24, 16, 4],
+    [6, 24, 36, 24, 6],
+    [4, 16, 24, 16, 4],
+    [1,  4,  6,  4, 1]
+], dtype=float)
 
+KERNEL_GAUSSIAN_7x7 = np.array([
+    [1,  6,  15,  20,  15,  6, 1],
+    [6,  36,  90, 120,  90, 36, 6],
+    [15, 90, 225, 300, 225, 90, 15],
+    [20,120, 300, 400, 300,120, 20],
+    [15, 90, 225, 300, 225, 90, 15],
+    [6,  36,  90, 120,  90, 36, 6],
+    [1,  6,  15,  20,  15,  6, 1]
+], dtype=float)
 def convolve_channel_vectorized(channel, kernel_flipped):
     """Convolve a single channel using vectorized sliding window view (stride trick)."""
     # Create a view of all windows at once (no memory copy)
