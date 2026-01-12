@@ -79,10 +79,10 @@ if __name__ == "__main__":
 
     profiler.disable()
 
-    # Save result
-    out_img = Image.fromarray(result)
-    out_img.save(output_path)
-    print(f"Saved: {output_path}")
+    # # Save result
+    # out_img = Image.fromarray(result)
+    # out_img.save(output_path)
+    # print(f"Saved: {output_path}")
 
     # Print profiling stats
     s = io.StringIO()

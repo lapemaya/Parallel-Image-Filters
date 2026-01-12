@@ -18,6 +18,23 @@ KERNEL_SHARPEN = np.array([[0,-1,0],[-1,5,-1],[0,-1,0]], dtype=float)
 KERNEL_EDGE = np.array([[-1,-1,-1],[-1,8,-1],[-1,-1,-1]], dtype=float)
 KERNEL_EMBOSS = np.array([[-2,-1,0],[-1,1,1],[0,1,2]], dtype=float)
 KERNEL_GAUSSIAN = np.array([[1,2,1],[2,4,2],[1,2,1]], dtype=float)
+KERNEL_GAUSSIAN_5x5 = np.array([
+    [1,  4,  6,  4, 1],
+    [4, 16, 24, 16, 4],
+    [6, 24, 36, 24, 6],
+    [4, 16, 24, 16, 4],
+    [1,  4,  6,  4, 1]
+], dtype=float)
+
+KERNEL_GAUSSIAN_7x7 = np.array([
+    [1,  6,  15,  20,  15,  6, 1],
+    [6,  36,  90, 120,  90, 36, 6],
+    [15, 90, 225, 300, 225, 90, 15],
+    [20,120, 300, 400, 300,120, 20],
+    [15, 90, 225, 300, 225, 90, 15],
+    [6,  36,  90, 120,  90, 36, 6],
+    [1,  6,  15,  20,  15,  6, 1]
+], dtype=float)
 
 def process_block_channel_shm(shm_input_name, shm_output_name, img_shape, out_shape, dtype_str,
                                kernel_flipped, channel_idx, start_i, end_i, start_j, end_j, kh, kw):
@@ -30,6 +47,8 @@ def process_block_channel_shm(shm_input_name, shm_output_name, img_shape, out_sh
     out_arr = np.ndarray(out_shape, dtype=dtype_str, buffer=shm_output.buf)
 
     # Extract channel
+
+
     channel = img_arr[:, :, channel_idx]
 
     # Extract region with kernel overlap
@@ -37,6 +56,7 @@ def process_block_channel_shm(shm_input_name, shm_output_name, img_shape, out_sh
     region_end_i = end_i + kh - 1
     region_start_j = start_j
     region_end_j = end_j + kw - 1
+
 
     region = channel[region_start_i:region_end_i, region_start_j:region_end_j]
 
@@ -141,7 +161,7 @@ if __name__ == "__main__":
         # Configuration
         input_path = "place.png"
         output_path = "output_parallel_advanced.png"
-        kernel = KERNEL_BLUR
+        kernel = KERNEL_GAUSSIAN_7x7
         normalize = True
         n_jobs = -1  # -1 uses all available cores
         block_size = None  # None = automatic, or set manually (e.g., 128, 256)
