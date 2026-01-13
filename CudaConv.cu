@@ -90,8 +90,8 @@ __constant__ float d_kernel[MAX_KERNEL_SIZE * MAX_KERNEL_SIZE];
 
 template<int K>
 __global__ void conv2d_kernel_optimized_K(
-    const float* img,
-    float* out,
+    const float* __restrict__ img,
+    float* __restrict__ out,
     int H, int W,
     int tileSize)
 {
@@ -108,7 +108,9 @@ __global__ void conv2d_kernel_optimized_K(
     constexpr int radius = K / 2;
 
     // sharedDim include halo: tileSize + (K-1)
+    // Aggiungiamo +1 di padding per evitare bank conflicts
     int sharedDim = tileSize + K - 1;
+    int sharedPitch = sharedDim + 1;  // pitch con padding
 
     // Coordinate (in pixel) dell'angolo alto-sinistra del tile di OUTPUT.
     int bx = (int)blockIdx.x * tileSize;
@@ -119,13 +121,13 @@ __global__ void conv2d_kernel_optimized_K(
     int gx = bx + tx - radius;
     int gy = by + ty - radius;
 
-    // Caricamento cooperativo in shared memory.
+    // Caricamento cooperativo in shared memory con __ldg per read-only cache
     // Ogni thread legge 1 elemento se dentro i limiti; altrimenti zero padding.
     if (tx < sharedDim && ty < sharedDim) {
         if (gx >= 0 && gx < W && gy >= 0 && gy < H)
-            s_tile[ty * sharedDim + tx] = img[gy * W + gx];
+            s_tile[ty * sharedPitch + tx] = __ldg(&img[gy * W + gx]);
         else
-            s_tile[ty * sharedDim + tx] = 0.0f;
+            s_tile[ty * sharedPitch + tx] = 0.0f;
     }
 
     // Sincronizza: tutti i dati devono essere in shared prima di convolvere.
@@ -146,8 +148,8 @@ __global__ void conv2d_kernel_optimized_K(
         for (int ky = 0; ky < K; ky++) {
             #pragma unroll
             for (int kx = 0; kx < K; kx++) {
-                // Indice in shared del vicino (pixel + offset filtro)
-                float v = s_tile[(ty + ky) * sharedDim + (tx + kx)];
+                // Indice in shared del vicino (pixel + offset filtro) con pitch
+                float v = s_tile[(ty + ky) * sharedPitch + (tx + kx)];
                 // Coefficiente filtro dalla constant memory
                 float w = d_kernel[ky * K + kx];
                 sum += v * w;
@@ -165,8 +167,8 @@ __global__ void conv2d_kernel_optimized_K(
   - Meno ottimizzata: i loop su K non possono essere completamente unrolled.
 */
 __global__ void conv2d_kernel_optimized(
-    const float* img,
-    float* out,
+    const float* __restrict__ img,
+    float* __restrict__ out,
     int H, int W,
     int K,
     int tileSize)
@@ -179,6 +181,7 @@ __global__ void conv2d_kernel_optimized(
 
     int radius = K / 2;
     int sharedDim = tileSize + K - 1;
+    int sharedPitch = sharedDim + 1;  // padding per bank conflicts
 
     int bx = (int)blockIdx.x * tileSize;
     int by = (int)blockIdx.y * tileSize;
@@ -186,12 +189,12 @@ __global__ void conv2d_kernel_optimized(
     int gx = bx + tx - radius;
     int gy = by + ty - radius;
 
-    // Caricamento cooperativo tile + halo
+    // Caricamento cooperativo tile + halo con __ldg
     if (tx < sharedDim && ty < sharedDim) {
         if (gx >= 0 && gx < W && gy >= 0 && gy < H)
-            s_tile[ty * sharedDim + tx] = img[gy * W + gx];
+            s_tile[ty * sharedPitch + tx] = __ldg(&img[gy * W + gx]);
         else
-            s_tile[ty * sharedDim + tx] = 0.0f;
+            s_tile[ty * sharedPitch + tx] = 0.0f;
     }
 
     __syncthreads();
@@ -206,7 +209,7 @@ __global__ void conv2d_kernel_optimized(
 
         for (int ky = 0; ky < K; ky++) {
             for (int kx = 0; kx < K; kx++) {
-                float v = s_tile[(ty + ky) * sharedDim + (tx + kx)];
+                float v = s_tile[(ty + ky) * sharedPitch + (tx + kx)];
                 float w = d_kernel[ky * K + kx];
                 sum += v * w;
             }
@@ -330,7 +333,8 @@ void convolveCUDA_RGB_Optimized(
 
     // Configurazione griglia
     int sharedDim = tileSize + K - 1;
-    size_t sharedMemSize = (size_t)sharedDim * (size_t)sharedDim * sizeof(float);
+    int sharedPitch = sharedDim + 1;  // +1 per padding anti-bank-conflict
+    size_t sharedMemSize = (size_t)sharedPitch * (size_t)sharedDim * sizeof(float);
 
     if (sharedMemSize > prop.sharedMemPerBlock) {
         cerr << "❌ Shared memory insufficiente\n";
@@ -442,6 +446,21 @@ int main(int argc, char** argv)
     // path: se passato da riga di comando usa quello, altrimenti default.
     string path = (argc > 1) ? argv[1] : "/home/lapemaya/CLionProjects/convCuda/place.png";
 
+    // Kernel size: optional argv[2] in {3,5,7}. Default 7.
+    int K = 7;
+    if (argc > 2) {
+        try {
+            K = std::stoi(argv[2]);
+        } catch (...) {
+            cerr << "Invalid kernel size argument (expected 3, 5, or 7).\n";
+            return 1;
+        }
+    }
+    if (!(K == 3 || K == 5 || K == 7)) {
+        cerr << "Invalid kernel size " << K << " (expected 3, 5, or 7).\n";
+        return 1;
+    }
+
     // Carica immagine e prepara canali.
     auto img = loadImageRGB(path);
 
@@ -453,20 +472,36 @@ int main(int argc, char** argv)
     vector<vector<float>> output_g(H, vector<float>(W, 0.0f));
     vector<vector<float>> output_b(H, vector<float>(W, 0.0f));
 
-    // Kernel gaussiano 7x7 (binomiale) normalizzato.
-    // Somma totale = 4096, quindi dividiamo per 4096.
-    vector<float> kernel = {
-        1,   6,  15,  20,  15,   6,  1,
-        6,  36,  90, 120,  90,  36,  6,
-       15,  90, 225, 300, 225,  90, 15,
-       20, 120, 300, 400, 300, 120, 20,
-       15,  90, 225, 300, 225,  90, 15,
-        6,  36,  90, 120,  90,  36,  6,
-        1,   6,  15,  20,  15,   6,  1
-    };
-    for (auto& v : kernel) v /= 4096.0f;
-
-    int K = 7;
+    // Gaussian kernel (binomial) normalized.
+    vector<float> kernel;
+    if (K == 3) {
+        kernel = {
+            1, 2, 1,
+            2, 4, 2,
+            1, 2, 1
+        };
+        for (auto& v : kernel) v /= 16.0f;
+    } else if (K == 5) {
+        kernel = {
+            1,  4,  6,  4, 1,
+            4, 16, 24, 16, 4,
+            6, 24, 36, 24, 6,
+            4, 16, 24, 16, 4,
+            1,  4,  6,  4, 1
+        };
+        for (auto& v : kernel) v /= 256.0f;
+    } else { // K == 7
+        kernel = {
+            1,   6,  15,  20,  15,   6,  1,
+            6,  36,  90, 120,  90,  36,  6,
+           15,  90, 225, 300, 225,  90, 15,
+           20, 120, 300, 400, 300, 120, 20,
+           15,  90, 225, 300, 225,  90, 15,
+            6,  36,  90, 120,  90,  36,  6,
+            1,   6,  15,  20,  15,   6,  1
+        };
+        for (auto& v : kernel) v /= 4096.0f;
+    }
 
     // tileSize influenza performance e shared memory.
     // Tipicamente 16 e' un buon compromesso.
@@ -482,9 +517,14 @@ int main(int argc, char** argv)
 
     auto t1 = chrono::high_resolution_clock::now();
 
-    cout << "✅ Tempo CUDA RGB ottimizzato: "
-         << chrono::duration_cast<chrono::milliseconds>(t1 - t0).count()
-         << " ms\n";
+    const auto ms = chrono::duration_cast<chrono::milliseconds>(t1 - t0).count();
+
+    // Stable parse-friendly timing line for benchmarking.
+    // Measures ONLY the region around convolveCUDA_RGB_Optimized() call.
+    cout << "CUDA_CONVOLVE_RGB_OPT_MS=" << ms << "\n";
+
+    // Human-friendly line (keep it for manual runs)
+    cout << "✅ Tempo CUDA RGB ottimizzato: " << ms << " ms\n";
 
     // Decommenta se vuoi vedere l'immagine risultante.
     //showImage(output_r, output_g, output_b, "Convoluzione RGB CUDA");

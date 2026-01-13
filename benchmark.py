@@ -10,6 +10,7 @@ import json
 import time
 import os
 import subprocess
+import re
 from datetime import datetime
 
 # Import the implementations
@@ -49,13 +50,48 @@ def save_test_image(img_array, filename):
     img.save(filename)
     return filename
 
+
+def _best_of(run_once, repeat=3, warmup=1):
+    """Run `run_once()` warmup times (not timed), then `repeat` times and return best elapsed seconds."""
+    for _ in range(max(0, warmup)):
+        run_once()
+
+    best = None
+    for _ in range(max(1, repeat)):
+        t0 = time.perf_counter()
+        run_once()
+        t1 = time.perf_counter()
+        dt = t1 - t0
+        best = dt if best is None else min(best, dt)
+    return best
+
+
+def _best_of_reported_time(run_once_returning_seconds, repeat=3, warmup=1):
+    """Run warmups, then repeat and return the best (minimum) time reported by the implementation."""
+    for _ in range(max(0, warmup)):
+        run_once_returning_seconds()
+
+    best = None
+    for _ in range(max(1, repeat)):
+        dt = run_once_returning_seconds()
+        best = dt if best is None else min(best, dt)
+    return best
+
 def benchmark_sequential(img_array, kernel, kernel_name):
     """Benchmark sequential implementation."""
     try:
-        start_time = time.time()
-        result = ConvSeq.apply_convolution(img_array, kernel, normalize=True)
-        end_time = time.time()
-        execution_time = end_time - start_time
+        if not hasattr(ConvSeq, "apply_convolution_timed"):
+            return {
+                "success": False,
+                "time": None,
+                "error": "ConvSeq.apply_convolution_timed not found (no internal timing available)"
+            }
+
+        def run_once_reported_seconds():
+            _res, dt = ConvSeq.apply_convolution_timed(img_array, kernel, normalize=True)
+            return dt
+
+        execution_time = _best_of_reported_time(run_once_reported_seconds, repeat=3, warmup=1)
         return {
             "success": True,
             "time": execution_time,
@@ -71,12 +107,20 @@ def benchmark_sequential(img_array, kernel, kernel_name):
 def benchmark_parallel(img_array, kernel, kernel_name):
     """Benchmark parallel CPU implementation."""
     try:
-        start_time = time.time()
-        result = ConvParallelAdvanced.apply_convolution(
-            img_array, kernel, normalize=True, n_jobs=-1
-        )
-        end_time = time.time()
-        execution_time = end_time - start_time
+        if not hasattr(ConvParallelAdvanced, "apply_convolution_timed"):
+            return {
+                "success": False,
+                "time": None,
+                "error": "ConvParallelAdvanced.apply_convolution_timed not found (no internal timing available)"
+            }
+
+        def run_once_reported_seconds():
+            _res, dt = ConvParallelAdvanced.apply_convolution_timed(
+                img_array, kernel, normalize=True, n_jobs=-1
+            )
+            return dt
+
+        execution_time = _best_of_reported_time(run_once_reported_seconds, repeat=3, warmup=1)
         return {
             "success": True,
             "time": execution_time,
@@ -100,45 +144,66 @@ def benchmark_cuda(image_path, kernel_name, cuda_executable="./build/CudaConv"):
                 "error": f"CUDA executable not found at {cuda_executable}"
             }
         
-        # Run CUDA implementation and capture output
-        start_time = time.time()
-        result = subprocess.run(
-            [cuda_executable, image_path],
-            capture_output=True,
-            text=True,
-            timeout=300  # 5 minute timeout
-        )
-        end_time = time.time()
-        
-        if result.returncode != 0:
+        # If your CUDA executable supports kernel selection, pass it here.
+        # args = [cuda_executable, image_path, kernel_name]
+        args = [cuda_executable, image_path]
+
+        def run_once():
+            return subprocess.run(
+                args,
+                capture_output=True,
+                text=True,
+                timeout=300  # 5 minute timeout
+            )
+
+        # Warm-up run (driver init, cache, etc.)
+        warm = run_once()
+        if warm.returncode != 0:
             return {
                 "success": False,
                 "time": None,
-                "error": f"CUDA execution failed: {result.stderr}"
+                "error": f"CUDA execution failed (warm-up): {warm.stderr}"
             }
-        
-        # Try to extract time from CUDA output (if available)
-        # Otherwise use wall clock time
-        cuda_time = None
-        for line in result.stdout.split('\n'):
-            if "Tempo CUDA" in line or "ms" in line:
-                try:
-                    # Extract time in milliseconds
-                    parts = line.split()
-                    for i, part in enumerate(parts):
-                        if "ms" in part or part.isdigit():
-                            cuda_time = float(part.replace("ms", "")) / 1000.0
-                            break
-                except:
-                    pass
-        
-        execution_time = cuda_time if cuda_time is not None else (end_time - start_time)
-        
+
+        # Timed runs: use ONLY the time printed by the CUDA program ("Tempo CUDA: ... ms")
+        best_out = None
+        best_cuda_time = None
+        for _ in range(3):
+            r = run_once()
+            if r.returncode != 0:
+                return {
+                    "success": False,
+                    "time": None,
+                    "error": f"CUDA execution failed: {r.stderr}"
+                }
+
+            cuda_time_this = None
+            for line in (r.stdout or "").splitlines():
+                if "Tempo CUDA" in line:
+                    m = re.search(r"([0-9]+(?:\.[0-9]+)?)\s*ms", line)
+                    if m:
+                        cuda_time_this = float(m.group(1)) / 1000.0
+                        break
+
+            if cuda_time_this is None:
+                return {
+                    "success": False,
+                    "time": None,
+                    "error": "Could not parse CUDA-reported time (expected a line like 'Tempo CUDA: <ms> ms').",
+                    "output": r.stdout,
+                }
+
+            if best_cuda_time is None or cuda_time_this < best_cuda_time:
+                best_cuda_time = cuda_time_this
+                best_out = r.stdout
+
+        execution_time = best_cuda_time
+
         return {
             "success": True,
             "time": execution_time,
             "error": None,
-            "output": result.stdout
+            "output": best_out
         }
     except subprocess.TimeoutExpired:
         return {
@@ -157,8 +222,8 @@ def run_benchmarks():
     """Run all benchmarks and save results."""
     # Generate image sizes: 50, 100, 200, 400, 800, 1600, 3200, 6400
     image_sizes = []
-    size = 50
-    while size <= 8000:
+    size = 800
+    while size <= 10000:
         image_sizes.append(size)
         size *= 2
     

@@ -11,6 +11,7 @@ import multiprocessing
 from multiprocessing import shared_memory
 import cProfile
 import pstats
+import time
 
 # Kernel presets
 KERNEL_BLUR = np.array([[1,1,1],[1,1,1],[1,1,1]], dtype=float)
@@ -155,6 +156,14 @@ def apply_convolution(img_arr, kernel, normalize=False, n_jobs=-1, block_size=No
         shm_output.unlink()
 
     return out_uint8
+
+
+def apply_convolution_timed(img_arr, kernel, normalize=False, n_jobs=-1, block_size=None):
+    """Run apply_convolution() and return (result, elapsed_seconds) measured inside this module."""
+    t0 = time.perf_counter()
+    out = apply_convolution(img_arr, kernel, normalize=normalize, n_jobs=n_jobs, block_size=block_size)
+    t1 = time.perf_counter()
+    return out, (t1 - t0)
 
 if __name__ == "__main__":
     with cProfile.Profile() as pr:

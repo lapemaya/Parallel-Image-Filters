@@ -7,6 +7,7 @@ from PIL import Image
 import cProfile
 import pstats
 import io
+import time
 
 # Kernel presets
 KERNEL_BLUR = np.array([[1,1,1],[1,1,1],[1,1,1]], dtype=float)
@@ -74,6 +75,14 @@ def apply_convolution(img_arr, kernel, normalize=False):
     out = np.clip(out, 0, 255).astype(np.uint8)
 
     return out
+
+
+def apply_convolution_timed(img_arr, kernel, normalize=False):
+    """Run apply_convolution() and return (result, elapsed_seconds) measured inside this module."""
+    t0 = time.perf_counter()
+    out = apply_convolution(img_arr, kernel, normalize=normalize)
+    t1 = time.perf_counter()
+    return out, (t1 - t0)
 
 if __name__ == "__main__":
     # Configuration

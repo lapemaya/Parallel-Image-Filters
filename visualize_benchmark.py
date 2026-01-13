@@ -1,123 +1,200 @@
 #!/usr/bin/env python3
 """
 Visualize benchmark results from benchmark_results.json
-Creates charts showing performance comparisons.
+Creates bar charts comparing execution times across implementations.
 """
+
 import json
-import sys
+import matplotlib.pyplot as plt
+import numpy as np
+from pathlib import Path
 
-def print_table(results):
-    """Print results in a formatted table."""
-    print("\n" + "="*100)
-    print("BENCHMARK RESULTS TABLE")
-    print("="*100)
-    
-    # Header
-    print(f"\n{'Image Size':<12} {'Kernel':<8} {'Sequential':<12} {'Parallel CPU':<14} {'CUDA GPU':<12} {'CPU Speedup':<12} {'GPU Speedup':<12}")
-    print("-"*100)
-    
-    for benchmark in results["benchmarks"]:
-        size = benchmark["image_size"]
-        kernel = benchmark["kernel_size"]
-        
-        seq = benchmark["results"]["sequential"]
-        par = benchmark["results"]["parallel_cpu"]
-        cuda = benchmark["results"]["cuda_gpu"]
-        
-        seq_time = f"{seq['time']:.3f}s" if seq["success"] else "FAIL"
-        par_time = f"{par['time']:.3f}s" if par["success"] else "FAIL"
-        cuda_time = f"{cuda['time']:.3f}s" if cuda["success"] else "FAIL"
-        
-        cpu_speedup = f"{benchmark.get('speedup_parallel_vs_sequential', 0):.2f}x" if "speedup_parallel_vs_sequential" in benchmark else "N/A"
-        gpu_speedup = f"{benchmark.get('speedup_cuda_vs_sequential', 0):.2f}x" if "speedup_cuda_vs_sequential" in benchmark else "N/A"
-        
-        print(f"{size}x{size:<6} {kernel:<8} {seq_time:<12} {par_time:<14} {cuda_time:<12} {cpu_speedup:<12} {gpu_speedup:<12}")
-    
-    print("-"*100)
+def load_results(json_path='benchmark_results.json'):
+    """Load benchmark results from JSON file."""
+    with open(json_path, 'r') as f:
+        data = json.load(f)
+    return data
 
-def print_summary(results):
-    """Print summary statistics."""
-    print("\n" + "="*100)
-    print("SUMMARY STATISTICS")
-    print("="*100)
+def organize_data(data):
+    """Organize results by implementation, image size, and kernel size."""
+    results = {}
     
-    # Calculate averages for each implementation
-    for impl_name in ["sequential", "parallel_cpu", "cuda_gpu"]:
-        times = [b["results"][impl_name]["time"] 
-                for b in results["benchmarks"] 
-                if b["results"][impl_name]["success"]]
+    for entry in data['results']:
+        img_size = entry['image_size']
+        kernel_size = entry['kernel_size']
+        impl = entry['py_module']
         
-        if times:
-            print(f"\n{impl_name.upper().replace('_', ' ')}:")
-            print(f"  Average time: {sum(times)/len(times):.3f}s")
-            print(f"  Min time: {min(times):.3f}s")
-            print(f"  Max time: {max(times):.3f}s")
-            print(f"  Successful runs: {len(times)}/{len(results['benchmarks'])}")
+        # Convert to milliseconds for comparison
+        if impl == 'CUDA':
+            time_ms = entry['cuda_ms']
+        else:
+            time_ms = entry['python_seconds'] * 1000
+        
+        key = (img_size, kernel_size)
+        if key not in results:
+            results[key] = {}
+        results[key][impl] = time_ms
     
-    # Average speedups
-    cpu_speedups = [b["speedup_parallel_vs_sequential"] 
-                   for b in results["benchmarks"] 
-                   if "speedup_parallel_vs_sequential" in b]
-    
-    gpu_speedups = [b["speedup_cuda_vs_sequential"] 
-                   for b in results["benchmarks"] 
-                   if "speedup_cuda_vs_sequential" in b]
-    
-    if cpu_speedups:
-        print(f"\nAVERAGE SPEEDUP (Parallel CPU vs Sequential): {sum(cpu_speedups)/len(cpu_speedups):.2f}x")
-    
-    if gpu_speedups:
-        print(f"AVERAGE SPEEDUP (CUDA GPU vs Sequential): {sum(gpu_speedups)/len(gpu_speedups):.2f}x")
+    return results
 
-def print_best_performers(results):
-    """Print best performing configurations."""
-    print("\n" + "="*100)
-    print("BEST PERFORMERS")
-    print("="*100)
+def plot_benchmark_results(data):
+    """Create visualization of benchmark results with execution times and speedups."""
+    results = organize_data(data)
     
-    # Find fastest for each kernel size
-    kernel_sizes = set(b["kernel_size"] for b in results["benchmarks"])
+    # Get unique implementations and sort
+    all_impls = set()
+    for times in results.values():
+        all_impls.update(times.keys())
+    implementations = sorted(list(all_impls))
     
-    for kernel in kernel_sizes:
-        print(f"\n{kernel} KERNEL:")
-        kernel_benchmarks = [b for b in results["benchmarks"] if b["kernel_size"] == kernel]
+    # Get unique combinations and sort
+    configs = sorted(results.keys())
+    
+    # Group by image size
+    img_sizes = sorted(set(img_size for img_size, _ in configs))
+    n_sizes = len(img_sizes)
+    
+    # Create figure with 2 rows: execution times and speedups
+    # Number of columns = number of different image sizes
+    fig = plt.figure(figsize=(8 * n_sizes, 12))
+    gs = fig.add_gridspec(2, n_sizes, hspace=0.3, wspace=0.25)
+    
+    # Row 1: Execution times
+    fig.text(0.5, 0.96, 'Image Convolution Benchmark Results', 
+             ha='center', fontsize=16, fontweight='bold')
+    
+    for idx, img_size in enumerate(img_sizes):
+        ax = fig.add_subplot(gs[0, idx])
         
-        for impl_name in ["sequential", "parallel_cpu", "cuda_gpu"]:
-            successful = [(b["image_size"], b["results"][impl_name]["time"]) 
-                         for b in kernel_benchmarks 
-                         if b["results"][impl_name]["success"]]
+        # Filter configs for this image size
+        size_configs = [(img, kern) for img, kern in configs if img == img_size]
+        kernel_sizes = [kern for _, kern in size_configs]
+        
+        # Prepare data for grouped bar chart
+        x = np.arange(len(kernel_sizes))
+        width = 0.25
+        
+        # Plot bars for each implementation
+        for i, impl in enumerate(implementations):
+            times = [results[(img_size, kern)].get(impl, 0) for kern in kernel_sizes]
+            offset = (i - len(implementations)/2 + 0.5) * width
+            bars = ax.bar(x + offset, times, width, label=impl)
             
-            if successful:
-                fastest = min(successful, key=lambda x: x[1])
-                print(f"  {impl_name.replace('_', ' ').title()}: {fastest[1]:.3f}s ({fastest[0]}x{fastest[0]} image)")
+            # Add value labels on top of bars
+            for bar in bars:
+                height = bar.get_height()
+                if height > 0:
+                    ax.text(bar.get_x() + bar.get_width()/2., height,
+                           f'{height:.1f}',
+                           ha='center', va='bottom', fontsize=8)
+        
+        ax.set_xlabel('Kernel Size', fontsize=11, fontweight='bold')
+        ax.set_ylabel('Time (ms)', fontsize=11, fontweight='bold')
+        ax.set_title(f'Execution Time - {img_size}x{img_size}', fontsize=12, fontweight='bold')
+        ax.set_xticks(x)
+        ax.set_xticklabels([f'{k}x{k}' for k in kernel_sizes])
+        ax.legend(fontsize=9)
+        ax.grid(True, alpha=0.3, axis='y')
+    
+    # Row 2: Speedups relative to ConvSeq
+    for idx, img_size in enumerate(img_sizes):
+        ax = fig.add_subplot(gs[1, idx])
+        
+        # Filter configs for this image size
+        size_configs = [(img, kern) for img, kern in configs if img == img_size]
+        kernel_sizes = [kern for _, kern in size_configs]
+        
+        # Prepare speedup data
+        x = np.arange(len(kernel_sizes))
+        width = 0.35
+        
+        # Calculate speedups vs ConvSeq
+        for i, impl in enumerate(implementations):
+            if impl == 'ConvSeq':
+                continue  # Skip baseline
+            
+            speedups = []
+            for kern in kernel_sizes:
+                times_dict = results[(img_size, kern)]
+                if 'ConvSeq' in times_dict and impl in times_dict:
+                    baseline = times_dict['ConvSeq']
+                    impl_time = times_dict[impl]
+                    speedup = baseline / impl_time if impl_time > 0 else 0
+                    speedups.append(speedup)
+                else:
+                    speedups.append(0)
+            
+            offset = (i - 0.5) * width
+            bars = ax.bar(x + offset, speedups, width, label=impl)
+            
+            # Add value labels on top of bars
+            for bar in bars:
+                height = bar.get_height()
+                if height > 0:
+                    ax.text(bar.get_x() + bar.get_width()/2., height,
+                           f'{height:.2f}x',
+                           ha='center', va='bottom', fontsize=8)
+        
+        # Add reference line at 1.0x
+        ax.axhline(y=1.0, color='red', linestyle='--', linewidth=1, alpha=0.7, label='Baseline (ConvSeq)')
+        
+        ax.set_xlabel('Kernel Size', fontsize=11, fontweight='bold')
+        ax.set_ylabel('Speedup vs ConvSeq', fontsize=11, fontweight='bold')
+        ax.set_title(f'Speedup - {img_size}x{img_size}', fontsize=12, fontweight='bold')
+        ax.set_xticks(x)
+        ax.set_xticklabels([f'{k}x{k}' for k in kernel_sizes])
+        ax.legend(fontsize=9)
+        ax.grid(True, alpha=0.3, axis='y')
+    
+    plt.savefig('benchmark_plot.png', dpi=300, bbox_inches='tight')
+    print(f"✓ Execution times plot saved to: benchmark_plot.png")
+    plt.show()
 
-def load_and_visualize(json_file="benchmark_results.json"):
-    """Load benchmark results and create visualizations."""
-    try:
-        with open(json_file, 'r') as f:
-            results = json.load(f)
-    except FileNotFoundError:
-        print(f"Error: {json_file} not found. Run benchmark.py first.")
-        return
-    except json.JSONDecodeError:
-        print(f"Error: {json_file} is not a valid JSON file.")
-        return
+def print_summary(data):
+    """Print summary statistics."""
+    results = organize_data(data)
     
-    print("\n" + "="*100)
-    print(f"BENCHMARK RESULTS VISUALIZATION")
-    print(f"Timestamp: {results['metadata']['timestamp']}")
-    print("="*100)
+    print("\n" + "="*70)
+    print("BENCHMARK SUMMARY")
+    print("="*70)
     
-    print_table(results)
-    print_summary(results)
-    print_best_performers(results)
-    
-    print("\n" + "="*100)
-    print("For graphical plots, consider using matplotlib:")
-    print("  pip install matplotlib")
-    print("Then modify this script to add plotting functionality.")
-    print("="*100 + "\n")
+    for (img_size, kernel_size), times in sorted(results.items()):
+        print(f"\nImage: {img_size}x{img_size} | Kernel: {kernel_size}x{kernel_size}")
+        print("-" * 70)
+        
+        # Sort by time
+        sorted_times = sorted(times.items(), key=lambda x: x[1])
+        
+        for impl, time_ms in sorted_times:
+            print(f"  {impl:20s}: {time_ms:8.2f} ms")
+        
+        # Calculate speedups relative to ConvSeq
+        if 'ConvSeq' in times:
+            baseline = times['ConvSeq']
+            print(f"\n  Speedups vs ConvSeq:")
+            for impl, time_ms in sorted_times:
+                if impl != 'ConvSeq' and time_ms > 0:
+                    speedup = baseline / time_ms
+                    print(f"    {impl:20s}: {speedup:6.2f}x")
 
-if __name__ == "__main__":
-    json_file = sys.argv[1] if len(sys.argv) > 1 else "benchmark_results.json"
-    load_and_visualize(json_file)
+def main():
+    # Load results
+    json_path = Path('benchmark_results.json')
+    if not json_path.exists():
+        print(f"Error: {json_path} not found!")
+        print("Run './benchmark.sh --quick' first to generate results.")
+        return
+    
+    data = load_results(json_path)
+    
+    # Print summary
+    print_summary(data)
+    
+    # Create visualization
+    print("\nGenerating plot...")
+    plot_benchmark_results(data)
+    
+    print("\n✓ Visualization complete!")
+
+if __name__ == '__main__':
+    main()
