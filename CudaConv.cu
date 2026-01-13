@@ -664,7 +664,7 @@ void convolveCUDA_RGB_Fused(
 int main(int argc, char** argv)
 {
     // path: se passato da riga di comando usa quello, altrimenti default.
-    string path = (argc > 1) ? argv[1] : "/home/lapemaya/CLionProjects/convCuda/place.png";
+    string path = (argc > 1) ? argv[1] : "/home/lapemaya/CLionProjects/convCuda/banana.png";
 
     // Kernel size: optional argv[2] in {3,5,7}. Default 7.
     int K = 7;
@@ -699,7 +699,7 @@ int main(int argc, char** argv)
             1, 2, 1,
             2, 4, 2,
             1, 2, 1
-        };
+        };/home/lapemaya
         for (auto& v : kernel) v /= 16.0f;
     } else if (K == 5) {
         kernel = {
