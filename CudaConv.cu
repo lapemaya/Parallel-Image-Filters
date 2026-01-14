@@ -359,7 +359,20 @@ int main(int argc, char** argv)
         };
         for (auto& v : kernel) v /= 4096.0f;
     }
+    
     int tileSize = 16;
+    if (argc > 3) {
+        try {
+            tileSize = std::stoi(argv[3]);
+        } catch (...) {
+            cerr << "Invalid tile size argument (expected positive integer).\n";
+            return 1;
+        }
+    }
+    if (tileSize <= 0 || tileSize > 32) {
+        cerr << "Invalid tile size " << tileSize << " (expected 1-32).\n";
+        return 1;
+    }
 
 
     // Execute CUDA optimized RGB convolution

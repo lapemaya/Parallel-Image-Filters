@@ -80,8 +80,9 @@ def apply_convolution(img_arr, kernel, normalize=False):
     return out
 
 
-def apply_convolution_timed(img_arr, kernel, normalize=False):
+def apply_convolution_timed(img_arr, kernel, normalize=False, n_jobs=1):
     # ==== TIME THE CONVOLUTION ====
+    # n_jobs parameter is ignored for sequential implementation
     t0 = time.perf_counter()
     out = apply_convolution(img_arr, kernel, normalize=normalize)
     t1 = time.perf_counter()

@@ -16,9 +16,10 @@ include_directories(${CUDA_INCLUDE_DIRS})
 
 add_executable(CudaConv CudaConv.cu)
 
-
+#find_package(CURL REQUIRED)
 
 target_link_libraries(CudaConv ${OpenCV_LIBS} ${CUDA_LIBRARIES})
+#target_link_libraries(CudaConv ${OpenCV_LIBS} ${CUDA_LIBRARIES} ${CURL_LIBRARIES})
 
 # Imposta le proprietà CUDA
 set_target_properties(CudaConv PROPERTIES

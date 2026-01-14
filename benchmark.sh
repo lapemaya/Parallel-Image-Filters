@@ -26,9 +26,13 @@ OUT_JSON="${OUT_JSON:-benchmark_results.json}"  # JSON output file
 
 SIZES=(800 1600 3200 6400 8000)
 KERNELS=(3 5 7)
+N_JOBS_LIST=(4 8 12 16 20)  # Number of processes for parallel implementations
+TILE_SIZES=(8 16 24)  # Tile sizes for CUDA (reduced to avoid configuration errors)
 
 if [[ "${1:-}" == "--quick" ]]; then
   SIZES=(50)
+  N_JOBS_LIST=(4)
+  TILE_SIZES=(16)
 fi
 
 mkdir -p "$ROOT_DIR/benchmark_images"
@@ -62,6 +66,7 @@ python_time_s() {
   local img_path="$1"
   local k="$2"
   local module="$3"
+  local n_jobs="${4:-1}"  # Default to 1 if not specified
   
   local tmpscript=$(mktemp --suffix=.py)
   trap "rm -f '$tmpscript'" RETURN
@@ -80,6 +85,7 @@ if __name__ == '__main__':
     module_name = sys.argv[1]
     img_path = sys.argv[2]
     k = int(sys.argv[3])
+    n_jobs = int(sys.argv[4]) if len(sys.argv) > 4 else 1
 
     mod = importlib.import_module(module_name)
     if not hasattr(mod, "apply_convolution_timed"):
@@ -111,22 +117,23 @@ if __name__ == '__main__':
         raise SystemExit("K must be 3, 5, or 7")
 
     # warm-up (discard)
-    _res, _dt = mod.apply_convolution_timed(img, kernel, normalize=True)
+    _res, _dt = mod.apply_convolution_timed(img, kernel, normalize=True, n_jobs=n_jobs)
 
     best = None
     for _ in range(3):
-        _res, dt = mod.apply_convolution_timed(img, kernel, normalize=True)
+        _res, dt = mod.apply_convolution_timed(img, kernel, normalize=True, n_jobs=n_jobs)
         best = dt if best is None else min(best, dt)
 
     print(f"{best:.9f}")
 PY
 
-  "$PYTHON_BIN" "$tmpscript" "$module" "$img_path" "$k"
+  "$PYTHON_BIN" "$tmpscript" "$module" "$img_path" "$k" "$n_jobs"
 }
 
 cuda_time_ms() {
   local img_path="$1"
   local k="$2"
+  local tile_size="${3:-16}"  # Default to 16 if not specified
 
   if [[ ! -x "$CUDA_EXE" ]]; then
     echo "ERROR: CUDA executable not found/executable at $CUDA_EXE" >&2
@@ -134,13 +141,13 @@ cuda_time_ms() {
   fi
 
   # warm-up
-  "$CUDA_EXE" "$img_path" "$k" >/dev/null
+  "$CUDA_EXE" "$img_path" "$k" "$tile_size" >/dev/null
 
   local best_ms=""
   local out
   local ms
   for _ in 1 2 3; do
-    out="$("$CUDA_EXE" "$img_path" "$k")"
+    out="$("$CUDA_EXE" "$img_path" "$k" "$tile_size")"
     ms="$(extract_cuda_ms "$out")" || {
       echo "ERROR: Could not parse CUDA_CONVOLVE_RGB_OPT_MS from output:" >&2
       echo "$out" >&2
@@ -164,7 +171,7 @@ if [[ -n "$OUT_CSV" ]]; then
   : >"$OUT_CSV"
 fi
 
-emit "size,kernel,py_module,python_seconds,cuda_ms"
+emit "size,kernel,py_module,n_jobs,tile_size,python_seconds,cuda_ms"
 
 # Collect results in an array for JSON conversion
 declare -a RESULTS=()
@@ -172,17 +179,29 @@ declare -a RESULTS=()
 for size in "${SIZES[@]}"; do
   img_path="$(gen_image "$size")"
   for k in "${KERNELS[@]}"; do
-    # Test both Python implementations
+    # Test Python implementations with different process counts
     for py_mod in "${PY_MODULES[@]}"; do
-      py_s="$(python_time_s "$img_path" "$k" "$py_mod")"
-      emit "${size},${k},${py_mod},${py_s},-"
-      RESULTS+=("$size,$k,$py_mod,$py_s,-1")
+      if [[ "$py_mod" == *"Parallel"* ]]; then
+        # Test parallel implementations with different n_jobs
+        for n_jobs in "${N_JOBS_LIST[@]}"; do
+          py_s="$(python_time_s "$img_path" "$k" "$py_mod" "$n_jobs")"
+          emit "${size},${k},${py_mod},${n_jobs},-,${py_s},-"
+          RESULTS+=("$size,$k,$py_mod,$n_jobs,-1,$py_s,-1")
+        done
+      else
+        # Sequential implementations: test once with n_jobs=1
+        py_s="$(python_time_s "$img_path" "$k" "$py_mod" "1")"
+        emit "${size},${k},${py_mod},1,-,${py_s},-"
+        RESULTS+=("$size,$k,$py_mod,1,-1,$py_s,-1")
+      fi
     done
     
-    # Test CUDA once per size/kernel
-    cuda_ms="$(cuda_time_ms "$img_path" "$k")"
-    emit "${size},${k},CUDA,-,${cuda_ms}"
-    RESULTS+=("$size,$k,CUDA,-1,$cuda_ms")
+    # Test CUDA with different tile sizes
+    for tile_size in "${TILE_SIZES[@]}"; do
+      cuda_ms="$(cuda_time_ms "$img_path" "$k" "$tile_size")"
+      emit "${size},${k},CUDA,1,${tile_size},-,${cuda_ms}"
+      RESULTS+=("$size,$k,CUDA,1,$tile_size,-1,$cuda_ms")
+    done
   done
 done
 
@@ -197,13 +216,15 @@ for line in """${RESULTS[*]}""".split():
     if not line.strip():
         continue
     parts = line.split(',')
-    if len(parts) == 5:
+    if len(parts) == 7:
         results.append({
             "image_size": int(parts[0]),
             "kernel_size": int(parts[1]),
             "py_module": parts[2],
-            "python_seconds": float(parts[3]),
-            "cuda_ms": int(parts[4])
+            "n_jobs": int(parts[3]),
+            "tile_size": int(parts[4]),
+            "python_seconds": float(parts[5]),
+            "cuda_ms": int(parts[6])
         })
 
 output = {
@@ -211,7 +232,9 @@ output = {
         "timestamp": datetime.now().isoformat(),
         "py_modules": "${PY_MODULES[*]}".split(),
         "image_sizes": [int(s) for s in "${SIZES[*]}".split()],
-        "kernel_sizes": [int(k) for k in "${KERNELS[*]}".split()]
+        "kernel_sizes": [int(k) for k in "${KERNELS[*]}".split()],
+        "n_jobs_list": [int(n) for n in "${N_JOBS_LIST[*]}".split()],
+        "tile_sizes": [int(t) for t in "${TILE_SIZES[*]}".split()]
     },
     "results": results
 }
