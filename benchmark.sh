@@ -28,7 +28,7 @@ SIZES=(800 1600 3200 6400 8000)
 KERNELS=(3 5 7)
 
 if [[ "${1:-}" == "--quick" ]]; then
-  SIZES=(6400)
+  SIZES=(50)
 fi
 
 mkdir -p "$ROOT_DIR/benchmark_images"
