@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2026-01-13T15:05:51.321706",
+    "timestamp": "2026-01-13T21:51:59.977464",
     "py_modules": [
       "ConvSeq",
       "ConvParallelAdvanced",
@@ -9,7 +9,10 @@
     ],
     "image_sizes": [
       800,
-      1600
+      1600,
+      3200,
+      6400,
+      8000
     ],
     "kernel_sizes": [
       3,
@@ -22,28 +25,28 @@
       "image_size": 800,
       "kernel_size": 3,
       "py_module": "ConvSeq",
-      "python_seconds": 0.023581563,
+      "python_seconds": 0.022324967,
       "cuda_ms": -1
     },
     {
       "image_size": 800,
       "kernel_size": 3,
       "py_module": "ConvParallelAdvanced",
-      "python_seconds": 0.019122561,
+      "python_seconds": 0.018765001,
       "cuda_ms": -1
     },
     {
       "image_size": 800,
       "kernel_size": 3,
       "py_module": "ConvSeqDumb",
-      "python_seconds": 4.085888798,
+      "python_seconds": 3.782154414,
       "cuda_ms": -1
     },
     {
       "image_size": 800,
       "kernel_size": 3,
       "py_module": "ConvParallelAdvancedDumb",
-      "python_seconds": 0.629026072,
+      "python_seconds": 0.631957205,
       "cuda_ms": -1
     },
     {
@@ -51,34 +54,34 @@
       "kernel_size": 3,
       "py_module": "CUDA",
       "python_seconds": -1.0,
-      "cuda_ms": 123
+      "cuda_ms": 8
     },
     {
       "image_size": 800,
       "kernel_size": 5,
       "py_module": "ConvSeq",
-      "python_seconds": 0.049017944,
+      "python_seconds": 0.049241606,
       "cuda_ms": -1
     },
     {
       "image_size": 800,
       "kernel_size": 5,
       "py_module": "ConvParallelAdvanced",
-      "python_seconds": 0.019098966,
+      "python_seconds": 0.018450467,
       "cuda_ms": -1
     },
     {
       "image_size": 800,
       "kernel_size": 5,
       "py_module": "ConvSeqDumb",
-      "python_seconds": 4.164289891,
+      "python_seconds": 3.982613467,
       "cuda_ms": -1
     },
     {
       "image_size": 800,
       "kernel_size": 5,
       "py_module": "ConvParallelAdvancedDumb",
-      "python_seconds": 0.686379535,
+      "python_seconds": 0.654327232,
       "cuda_ms": -1
     },
     {
@@ -86,34 +89,34 @@
       "kernel_size": 5,
       "py_module": "CUDA",
       "python_seconds": -1.0,
-      "cuda_ms": 123
+      "cuda_ms": 8
     },
     {
       "image_size": 800,
       "kernel_size": 7,
       "py_module": "ConvSeq",
-      "python_seconds": 0.061732651,
+      "python_seconds": 0.060194776,
       "cuda_ms": -1
     },
     {
       "image_size": 800,
       "kernel_size": 7,
       "py_module": "ConvParallelAdvanced",
-      "python_seconds": 0.028011229,
+      "python_seconds": 0.027967994,
       "cuda_ms": -1
     },
     {
       "image_size": 800,
       "kernel_size": 7,
       "py_module": "ConvSeqDumb",
-      "python_seconds": 4.182716562,
+      "python_seconds": 3.848961565,
       "cuda_ms": -1
     },
     {
       "image_size": 800,
       "kernel_size": 7,
       "py_module": "ConvParallelAdvancedDumb",
-      "python_seconds": 0.664403039,
+      "python_seconds": 0.65502069,
       "cuda_ms": -1
     },
     {
@@ -121,34 +124,34 @@
       "kernel_size": 7,
       "py_module": "CUDA",
       "python_seconds": -1.0,
-      "cuda_ms": 123
+      "cuda_ms": 8
     },
     {
       "image_size": 1600,
       "kernel_size": 3,
       "py_module": "ConvSeq",
-      "python_seconds": 0.105645428,
+      "python_seconds": 0.09636688,
       "cuda_ms": -1
     },
     {
       "image_size": 1600,
       "kernel_size": 3,
       "py_module": "ConvParallelAdvanced",
-      "python_seconds": 0.04747329,
+      "python_seconds": 0.057244374,
       "cuda_ms": -1
     },
     {
       "image_size": 1600,
       "kernel_size": 3,
       "py_module": "ConvSeqDumb",
-      "python_seconds": 16.364693803,
+      "python_seconds": 15.169130306,
       "cuda_ms": -1
     },
     {
       "image_size": 1600,
       "kernel_size": 3,
       "py_module": "ConvParallelAdvancedDumb",
-      "python_seconds": 2.623166296,
+      "python_seconds": 2.563895492,
       "cuda_ms": -1
     },
     {
@@ -156,34 +159,34 @@
       "kernel_size": 3,
       "py_module": "CUDA",
       "python_seconds": -1.0,
-      "cuda_ms": 164
+      "cuda_ms": 33
     },
     {
       "image_size": 1600,
       "kernel_size": 5,
       "py_module": "ConvSeq",
-      "python_seconds": 0.215777886,
+      "python_seconds": 0.186324089,
       "cuda_ms": -1
     },
     {
       "image_size": 1600,
       "kernel_size": 5,
       "py_module": "ConvParallelAdvanced",
-      "python_seconds": 0.070905838,
+      "python_seconds": 0.057709311,
       "cuda_ms": -1
     },
     {
       "image_size": 1600,
       "kernel_size": 5,
       "py_module": "ConvSeqDumb",
-      "python_seconds": 16.434347063,
+      "python_seconds": 15.145411679,
       "cuda_ms": -1
     },
     {
       "image_size": 1600,
       "kernel_size": 5,
       "py_module": "ConvParallelAdvancedDumb",
-      "python_seconds": 2.665562878,
+      "python_seconds": 2.597333473,
       "cuda_ms": -1
     },
     {
@@ -191,34 +194,34 @@
       "kernel_size": 5,
       "py_module": "CUDA",
       "python_seconds": -1.0,
-      "cuda_ms": 162
+      "cuda_ms": 33
     },
     {
       "image_size": 1600,
       "kernel_size": 7,
       "py_module": "ConvSeq",
-      "python_seconds": 0.29163278,
+      "python_seconds": 0.540863285,
       "cuda_ms": -1
     },
     {
       "image_size": 1600,
       "kernel_size": 7,
       "py_module": "ConvParallelAdvanced",
-      "python_seconds": 0.080381978,
+      "python_seconds": 0.067539431,
       "cuda_ms": -1
     },
     {
       "image_size": 1600,
       "kernel_size": 7,
       "py_module": "ConvSeqDumb",
-      "python_seconds": 16.537614587,
+      "python_seconds": 15.923354716,
       "cuda_ms": -1
     },
     {
       "image_size": 1600,
       "kernel_size": 7,
       "py_module": "ConvParallelAdvancedDumb",
-      "python_seconds": 2.646119117,
+      "python_seconds": 2.57506678,
       "cuda_ms": -1
     },
     {
@@ -226,7 +229,322 @@
       "kernel_size": 7,
       "py_module": "CUDA",
       "python_seconds": -1.0,
-      "cuda_ms": 160
+      "cuda_ms": 34
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvSeq",
+      "python_seconds": 0.422163817,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvanced",
+      "python_seconds": 0.189674973,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvSeqDumb",
+      "python_seconds": 60.114753907,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "python_seconds": 10.08443646,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "python_seconds": -1.0,
+      "cuda_ms": 135
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvSeq",
+      "python_seconds": 0.811848595,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvanced",
+      "python_seconds": 0.215965497,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvSeqDumb",
+      "python_seconds": 59.983507447,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "python_seconds": 10.325229808,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "python_seconds": -1.0,
+      "cuda_ms": 135
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvSeq",
+      "python_seconds": 1.008638606,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvanced",
+      "python_seconds": 0.273701232,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvSeqDumb",
+      "python_seconds": 64.367986182,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "python_seconds": 10.353112831,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "python_seconds": -1.0,
+      "cuda_ms": 142
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvSeq",
+      "python_seconds": 1.607959669,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvanced",
+      "python_seconds": 0.679664715,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvSeqDumb",
+      "python_seconds": 238.516430432,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "python_seconds": 48.669605518,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "python_seconds": -1.0,
+      "cuda_ms": 542
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvSeq",
+      "python_seconds": 3.086217999,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvanced",
+      "python_seconds": 0.846947925,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvSeqDumb",
+      "python_seconds": 241.499019373,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "python_seconds": 49.790239918,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "python_seconds": -1.0,
+      "cuda_ms": 546
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvSeq",
+      "python_seconds": 12.217625214,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvanced",
+      "python_seconds": 1.092918481,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvSeqDumb",
+      "python_seconds": 240.625157822,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "python_seconds": 50.633444678,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "python_seconds": -1.0,
+      "cuda_ms": 552
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvSeq",
+      "python_seconds": 2.623500692,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvanced",
+      "python_seconds": 1.078496648,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvSeqDumb",
+      "python_seconds": 366.008838804,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "python_seconds": 78.235590315,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "python_seconds": -1.0,
+      "cuda_ms": 845
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvSeq",
+      "python_seconds": 4.76081922,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvanced",
+      "python_seconds": 1.278549521,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvSeqDumb",
+      "python_seconds": 379.60626863,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "python_seconds": 78.297626243,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "python_seconds": -1.0,
+      "cuda_ms": 850
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvSeq",
+      "python_seconds": 6.201186372,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvanced",
+      "python_seconds": 1.653598922,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvSeqDumb",
+      "python_seconds": 377.900835218,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "python_seconds": 79.160498005,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "python_seconds": -1.0,
+      "cuda_ms": 860
     }
   ]
 }
