@@ -1,9 +1,7 @@
 {
   "metadata": {
-    "timestamp": "2026-01-14T15:29:48.933290",
+    "timestamp": "2026-01-14T17:19:35.956869",
     "py_modules": [
-      "ConvSeq",
-      "ConvParallelAdvanced",
       "ConvSeqDumb",
       "ConvParallelAdvancedDumb"
     ],
@@ -20,29 +18,15 @@
     {
       "image_size": 50,
       "kernel_size": 3,
-      "py_module": "ConvSeq",
-      "python_seconds": 0.000120904,
-      "cuda_ms": -1
-    },
-    {
-      "image_size": 50,
-      "kernel_size": 3,
-      "py_module": "ConvParallelAdvanced",
-      "python_seconds": 0.02099887,
-      "cuda_ms": -1
-    },
-    {
-      "image_size": 50,
-      "kernel_size": 3,
       "py_module": "ConvSeqDumb",
-      "python_seconds": 0.013815587,
+      "python_seconds": 0.017524908,
       "cuda_ms": -1
     },
     {
       "image_size": 50,
       "kernel_size": 3,
       "py_module": "ConvParallelAdvancedDumb",
-      "python_seconds": 0.011018777,
+      "python_seconds": 0.021219812,
       "cuda_ms": -1
     },
     {
@@ -55,29 +39,15 @@
     {
       "image_size": 50,
       "kernel_size": 5,
-      "py_module": "ConvSeq",
-      "python_seconds": 0.000177987,
-      "cuda_ms": -1
-    },
-    {
-      "image_size": 50,
-      "kernel_size": 5,
-      "py_module": "ConvParallelAdvanced",
-      "python_seconds": 0.020932685,
-      "cuda_ms": -1
-    },
-    {
-      "image_size": 50,
-      "kernel_size": 5,
       "py_module": "ConvSeqDumb",
-      "python_seconds": 0.013185641,
+      "python_seconds": 0.016243256,
       "cuda_ms": -1
     },
     {
       "image_size": 50,
       "kernel_size": 5,
       "py_module": "ConvParallelAdvancedDumb",
-      "python_seconds": 0.020939231,
+      "python_seconds": 0.011603271,
       "cuda_ms": -1
     },
     {
@@ -90,29 +60,15 @@
     {
       "image_size": 50,
       "kernel_size": 7,
-      "py_module": "ConvSeq",
-      "python_seconds": 0.000266239,
-      "cuda_ms": -1
-    },
-    {
-      "image_size": 50,
-      "kernel_size": 7,
-      "py_module": "ConvParallelAdvanced",
-      "python_seconds": 0.01087787,
-      "cuda_ms": -1
-    },
-    {
-      "image_size": 50,
-      "kernel_size": 7,
       "py_module": "ConvSeqDumb",
-      "python_seconds": 0.012098948,
+      "python_seconds": 0.014924373,
       "cuda_ms": -1
     },
     {
       "image_size": 50,
       "kernel_size": 7,
       "py_module": "ConvParallelAdvancedDumb",
-      "python_seconds": 0.021056777,
+      "python_seconds": 0.021901145,
       "cuda_ms": -1
     },
     {

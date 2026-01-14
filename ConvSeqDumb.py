@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-"""
-Simple image convolution script.
-"""
+# ==== IMPORTS ====
 import numpy as np
 from PIL import Image
 import cProfile
@@ -9,7 +6,7 @@ import pstats
 import io
 import time
 
-# Kernel presets
+# ===== KERNEL PRESETS =====
 KERNEL_BLUR = np.array([[1,1,1],[1,1,1],[1,1,1]], dtype=float)
 KERNEL_SHARPEN = np.array([[0,-1,0],[-1,5,-1],[0,-1,0]], dtype=float)
 KERNEL_EDGE = np.array([[-1,-1,-1],[-1,8,-1],[-1,-1,-1]], dtype=float)
@@ -33,95 +30,91 @@ KERNEL_GAUSSIAN_7x7 = np.array([
     [1,  6,  15,  20,  15,  6, 1]
 ], dtype=float)
 
+
+# ============================================
+# ======== CONVOLUTION FUNCTION ==============
+# ============================================
 def convolve_channel_vectorized(channel, kernel_flipped):
-    """Convolve a single channel using classic nested loops."""
+
+    # ==== SETUP PARAMETERS ====
     kh, kw = kernel_flipped.shape
     ch, cw = channel.shape
     out_h = ch - kh + 1
     out_w = cw - kw + 1
-    
-    # Allocate output array
     result = np.zeros((out_h, out_w), dtype=np.float32)
     
-    # Classic double loop over each output pixel
+    # ==== NESTED LOOPS CONVOLUTION ====
     for i in range(out_h):
         for j in range(out_w):
-            # Extract window
             window = channel[i:i+kh, j:j+kw]
-            # Compute convolution: element-wise multiplication and sum
             result[i, j] = np.sum(window * kernel_flipped)
     
     return result
 
+# ============================================
+# ========= SETUP CONVOLUTION ================
+# ============================================
 def apply_convolution(img_arr, kernel, normalize=False):
-    # Normalize kernel if requested
+
+    # ==== SETUP =====
     if normalize:
         s = kernel.sum()
         if s != 0:
             kernel = kernel / s
 
-    # Pre-flip kernel once and convert to float32
     kernel_flipped = np.flipud(np.fliplr(kernel)).astype(np.float32)
-
-    # Convert to float32 once for all channels (more efficient than float64)
-    # Make C-contiguous for better performance
     img_float = np.ascontiguousarray(img_arr.astype(np.float32))
 
-    # Calculate output dimensions
+    # ==== PREPARE OUTPUT ====
     kh, kw = kernel.shape
     h, w = img_arr.shape[0], img_arr.shape[1]
     out_h = h - kh + 1
     out_w = w - kw + 1
-
-    # Pre-allocate output array as float32 (clip only at the end)
     out = np.zeros((out_h, out_w, 3), dtype=np.float32)
 
-    # Process each channel with vectorized convolution (sliding window view + einsum)
+    # ==== CONVOLVE EACH CHANNEL ====
     for c in range(3):
         out[:, :, c] = convolve_channel_vectorized(img_float[:, :, c], kernel_flipped)
-
-    # Clip and convert to uint8 once at the end (more efficient)
     out = np.clip(out, 0, 255).astype(np.uint8)
 
     return out
 
 
 def apply_convolution_timed(img_arr, kernel, normalize=False):
-    """Run apply_convolution() and return (result, elapsed_seconds) measured inside this module."""
+    # ==== TIME THE CONVOLUTION ====
     t0 = time.perf_counter()
     out = apply_convolution(img_arr, kernel, normalize=normalize)
     t1 = time.perf_counter()
     return out, (t1 - t0)
 
+
+# ============================================
+# ================ MAIN ======================
+# ============================================
 if __name__ == "__main__":
-    # Configuration
+
+    # ==== PARAMETERS ====
     input_path = "place.png"
     output_path = "output_sequential.jpg"
     kernel = KERNEL_GAUSSIAN_7x7
     normalize = True
 
-    # Load RGB image
+    # ===== LOAD IMAGE =====
     img = Image.open(input_path).convert("RGB")
     arr = np.array(img)
 
-    # Profile the convolution
+    # ===== PROFILE SETUP =====
     profiler = cProfile.Profile()
     profiler.enable()
 
-    # Apply convolution
+    # ===== RUN CONVOLUTION =====
     result = apply_convolution(arr, kernel, normalize=normalize)
-
     profiler.disable()
 
-    # # Save result
-    # out_img = Image.fromarray(result)
-    # out_img.save(output_path)
-    # print(f"Saved: {output_path}")
-
-    # Print profiling stats
+    # ===== PRINT RESULTS PROFILER =====
     s = io.StringIO()
     stats = pstats.Stats(profiler, stream=s).sort_stats('cumulative')
-    stats.print_stats(20)  # Top 20 functions
+    stats.print_stats(20)
     print("\n=== Profiling Results ===")
     print(s.getvalue())
 

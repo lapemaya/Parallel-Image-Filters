@@ -19,7 +19,7 @@ if [[ -z "${PYTHON_BIN:-}" ]]; then
 fi
 
 # Default to ConvSeq (no multiprocessing noise).
-PY_MODULES=("ConvSeq" "ConvParallelAdvanced" "ConvSeqDumb" "ConvParallelAdvancedDumb")  # Test optimized and classic implementations
+PY_MODULES=( "ConvSeqDumb" "ConvParallelAdvancedDumb")  # Test optimized and classic implementations
 CUDA_EXE="${CUDA_EXE:-$ROOT_DIR/build/CudaConv}"
 OUT_CSV="${OUT_CSV:-}"  # if set, also write CSV to file
 OUT_JSON="${OUT_JSON:-benchmark_results.json}"  # JSON output file

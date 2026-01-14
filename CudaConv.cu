@@ -54,7 +54,7 @@ __global__ void conv2d_kernel_optimized_K(
     // ==== LOAD IMAGE TILE TO SHARED MEMORY ====
     if (tx < sharedDim && ty < sharedDim) {
         if (gx >= 0 && gx < W && gy >= 0 && gy < H)
-            s_tile[...] = img[gy * W + gx];  
+            s_tile[ty * sharedPitch + tx] = img[gy * W + gx];
         else
             s_tile[ty * sharedPitch + tx] = 0.0f;
     }
@@ -135,7 +135,7 @@ int convolveCUDA_RGB_Optimized(
         int W = (int)img_r[0].size();
         size_t imgBytes = (size_t)H * (size_t)W * sizeof(float);
 
-        // ===== ALLOC PINNED HOST
+        // ===== ALLOC PINNED HOST =====
         cudaDeviceProp prop{};
         CUDA_CHECK(cudaGetDeviceProperties(&prop, 0));
 
@@ -199,7 +199,7 @@ int convolveCUDA_RGB_Optimized(
                 d_img, d_out, H, W, tileSize);
         } else {
             conv2d_kernel_optimized_K<3><<<grid, block, sharedMemSize>>>(
-                d_img, d_out, H, W, K, tileSize);
+                d_img, d_out, H, W, tileSize);
         }
 
         //===== ERROR CHECK & SYNC =====
@@ -234,7 +234,7 @@ int convolveCUDA_RGB_Optimized(
                 d_img, d_out, H, W, tileSize);
         } else {
             conv2d_kernel_optimized_K<3><<<grid, block, sharedMemSize>>>(
-                d_img, d_out, H, W, K, tileSize);
+                d_img, d_out, H, W, tileSize);
         }
 
         //===== ERROR CHECK & SYNC =====
@@ -268,7 +268,7 @@ int convolveCUDA_RGB_Optimized(
                 d_img, d_out, H, W, tileSize);
         } else {
             conv2d_kernel_optimized_K<3><<<grid, block, sharedMemSize>>>(
-                d_img, d_out, H, W, K, tileSize);
+                d_img, d_out, H, W, tileSize);
         }
 
         //===== ERROR CHECK & SYNC =====
@@ -291,7 +291,7 @@ int convolveCUDA_RGB_Optimized(
         CUDA_CHECK(cudaFree(d_img));
         CUDA_CHECK(cudaFree(d_out));
         CUDA_CHECK(cudaFreeHost(h_img_pinned));
-        CUDA_CHECK(cudaFreeHost(h_out_pinned));h ====
+        CUDA_CHECK(cudaFreeHost(h_out_pinned));
         return ms;
     }
 
