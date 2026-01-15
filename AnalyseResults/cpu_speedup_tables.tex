@@ -1,0 +1,170 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+\title{CPU Parallel Speedup Analysis}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{CPU Parallel Speedup vs Sequential}
+\noindent Speedup computed as: $S = \frac{T_{\text{sequential}}}{T_{\text{parallel}}(n)}$
+
+\noindent where $n$ is the number of parallel jobs (\texttt{n\_jobs}).
+
+\subsection{Kernel Size: 3×3}
+\begin{table}[h]
+\centering
+\caption{Speedup for kernel 3×3 at different image sizes and n\_jobs}
+\label{tab:speedup_k3}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Image Size} & \textbf{4 jobs} & \textbf{8 jobs} & \textbf{12 jobs} & \textbf{16 jobs} & \textbf{20 jobs} \\
+\midrule
+800×800 & \cellcolor{yellow!20}2.86× & \cellcolor{yellow!20}4.52× & 5.70× & 5.76× & 6.09× \\
+1600×1600 & \cellcolor{yellow!20}2.81× & \cellcolor{yellow!20}4.27× & 4.75× & 4.78× & 4.99× \\
+3200×3200 & \cellcolor{yellow!20}2.60× & 3.78× & 4.67× & 4.74× & 4.84× \\
+6400×6400 & \cellcolor{yellow!20}2.55× & 3.72× & 4.52× & 4.51× & 4.78× \\
+8000×8000 & \cellcolor{yellow!20}2.55× & 3.69× & 4.50× & 4.62× & 4.83× \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Parallel Efficiency for Kernel 3×3}
+\begin{table}[h]
+\centering
+\caption{Efficiency (\%) for kernel 3×3: $E = \frac{S}{n} \times 100$}
+\label{tab:efficiency_k3}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Image Size} & \textbf{4 jobs} & \textbf{8 jobs} & \textbf{12 jobs} & \textbf{16 jobs} & \textbf{20 jobs} \\
+\midrule
+800×800 & \cellcolor{yellow!20}71.6\% & \cellcolor{yellow!20}56.5\% & 47.5\% & 36.0\% & 30.4\% \\
+1600×1600 & \cellcolor{yellow!20}70.2\% & \cellcolor{yellow!20}53.4\% & 39.6\% & 29.9\% & 24.9\% \\
+3200×3200 & \cellcolor{yellow!20}65.0\% & 47.2\% & 38.9\% & 29.6\% & 24.2\% \\
+6400×6400 & \cellcolor{yellow!20}63.7\% & 46.5\% & 37.7\% & 28.2\% & 23.9\% \\
+8000×8000 & \cellcolor{yellow!20}63.8\% & 46.1\% & 37.5\% & 28.9\% & 24.2\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\subsection{Kernel Size: 5×5}
+\begin{table}[h]
+\centering
+\caption{Speedup for kernel 5×5 at different image sizes and n\_jobs}
+\label{tab:speedup_k5}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Image Size} & \textbf{4 jobs} & \textbf{8 jobs} & \textbf{12 jobs} & \textbf{16 jobs} & \textbf{20 jobs} \\
+\midrule
+800×800 & \cellcolor{yellow!20}2.85× & \cellcolor{yellow!20}4.46× & 5.75× & 5.76× & 6.05× \\
+1600×1600 & \cellcolor{yellow!20}2.78× & \cellcolor{yellow!20}4.28× & 4.71× & 4.66× & 4.89× \\
+3200×3200 & \cellcolor{yellow!20}2.76× & 3.82× & 4.56× & 4.58× & 4.89× \\
+6400×6400 & \cellcolor{yellow!20}2.54× & 3.78× & 4.56× & 4.69× & 4.74× \\
+8000×8000 & \cellcolor{yellow!20}2.54× & 3.70× & 4.45× & 4.59× & 4.81× \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Parallel Efficiency for Kernel 5×5}
+\begin{table}[h]
+\centering
+\caption{Efficiency (\%) for kernel 5×5: $E = \frac{S}{n} \times 100$}
+\label{tab:efficiency_k5}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Image Size} & \textbf{4 jobs} & \textbf{8 jobs} & \textbf{12 jobs} & \textbf{16 jobs} & \textbf{20 jobs} \\
+\midrule
+800×800 & \cellcolor{yellow!20}71.1\% & \cellcolor{yellow!20}55.7\% & 47.9\% & 36.0\% & 30.3\% \\
+1600×1600 & \cellcolor{yellow!20}69.5\% & \cellcolor{yellow!20}53.5\% & 39.3\% & 29.1\% & 24.5\% \\
+3200×3200 & \cellcolor{yellow!20}69.1\% & 47.8\% & 38.0\% & 28.6\% & 24.4\% \\
+6400×6400 & \cellcolor{yellow!20}63.6\% & 47.2\% & 38.0\% & 29.3\% & 23.7\% \\
+8000×8000 & \cellcolor{yellow!20}63.5\% & 46.3\% & 37.1\% & 28.7\% & 24.1\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\subsection{Kernel Size: 7×7}
+\begin{table}[h]
+\centering
+\caption{Speedup for kernel 7×7 at different image sizes and n\_jobs}
+\label{tab:speedup_k7}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Image Size} & \textbf{4 jobs} & \textbf{8 jobs} & \textbf{12 jobs} & \textbf{16 jobs} & \textbf{20 jobs} \\
+\midrule
+800×800 & \cellcolor{yellow!20}2.59× & \cellcolor{yellow!20}4.29× & 5.48× & 5.21× & 5.69× \\
+1600×1600 & \cellcolor{yellow!20}2.82× & \cellcolor{yellow!20}4.45× & 4.85× & 4.77× & 5.00× \\
+3200×3200 & \cellcolor{yellow!20}2.67× & 3.70× & 4.57× & 4.56× & 4.80× \\
+6400×6400 & \cellcolor{yellow!20}2.60× & 3.75× & 4.53× & 4.51× & 4.83× \\
+8000×8000 & \cellcolor{yellow!20}2.54× & 3.75× & 4.42× & 4.67× & 4.77× \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Parallel Efficiency for Kernel 7×7}
+\begin{table}[h]
+\centering
+\caption{Efficiency (\%) for kernel 7×7: $E = \frac{S}{n} \times 100$}
+\label{tab:efficiency_k7}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Image Size} & \textbf{4 jobs} & \textbf{8 jobs} & \textbf{12 jobs} & \textbf{16 jobs} & \textbf{20 jobs} \\
+\midrule
+800×800 & \cellcolor{yellow!20}64.9\% & \cellcolor{yellow!20}53.7\% & 45.7\% & 32.6\% & 28.4\% \\
+1600×1600 & \cellcolor{yellow!20}70.5\% & \cellcolor{yellow!20}55.6\% & 40.4\% & 29.8\% & 25.0\% \\
+3200×3200 & \cellcolor{yellow!20}66.9\% & 46.3\% & 38.0\% & 28.5\% & 24.0\% \\
+6400×6400 & \cellcolor{yellow!20}65.0\% & 46.9\% & 37.8\% & 28.2\% & 24.2\% \\
+8000×8000 & \cellcolor{yellow!20}63.4\% & 46.8\% & 36.9\% & 29.2\% & 23.9\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\section{Summary}
+\begin{itemize}
+\item \colorbox{green!20}{Green}: High efficiency (≥80\%)
+\item \colorbox{yellow!20}{Yellow}: Moderate efficiency (50-80\%)
+\item No color: Lower efficiency (<50\%)
+\end{itemize}
+
+\noindent \textbf{Key Observations:}
+\begin{itemize}
+\item Speedup generally increases with the number of jobs but shows diminishing returns
+\item Larger images tend to achieve better parallel efficiency
+\item Kernel size affects the computational workload and parallel scaling behavior
+\end{itemize}
+
+\subsection{Normalized Performance: Time per MAC}
+\noindent This metric normalizes execution time by the number of multiply-accumulate operations (MACs = $H \times W \times 3 \times K^2$), providing insight into computational efficiency.
+
+\begin{table}[h]
+\centering
+\caption{Time per MAC (nanoseconds) for CPU Parallel - Best n\_jobs}
+\label{tab:cpu_time_per_mac}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Image Size} & \textbf{K=3} & \textbf{K=5} & \textbf{K=7} \\
+\midrule
+800×800 & 36.3474 & 13.5791 & 7.1607 \\
+1600×1600 & 44.2241 & 16.2258 & 8.4222 \\
+3200×3200 & 44.6305 & 16.1961 & 8.3102 \\
+6400×6400 & 44.2959 & 16.3875 & 8.4040 \\
+8000×8000 & 44.2434 & 16.0586 & 8.3288 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent \textbf{Interpretation:} Lower ns/MAC values indicate better computational efficiency. If time/MAC varies significantly with kernel size, it suggests the implementation may have different bottlenecks (e.g., cache effects, memory bandwidth) depending on $K$.
+
+\end{document}

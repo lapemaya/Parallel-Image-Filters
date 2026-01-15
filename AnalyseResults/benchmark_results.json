@@ -1,0 +1,1386 @@
+{
+  "metadata": {
+    "timestamp": "2026-01-15T01:25:55.363970",
+    "py_modules": [
+      "ConvSeqDumb",
+      "ConvParallelAdvancedDumb"
+    ],
+    "image_sizes": [
+      800,
+      1600,
+      3200,
+      6400,
+      8000
+    ],
+    "kernel_sizes": [
+      3,
+      5,
+      7
+    ],
+    "n_jobs_list": [
+      4,
+      8,
+      12,
+      16,
+      20
+    ],
+    "tile_sizes": [
+      8,
+      16,
+      24,
+      32
+    ]
+  },
+  "results": [
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 3.823971238,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 1.334926791,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 0.845679039,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 0.670869801,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 0.663649245,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 0.62808368,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 9
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 9
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 9
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 10
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 3.945759371,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 1.38669885,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 0.884789416,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 0.686624745,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 0.685008938,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 0.651798619,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 9
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 10
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 9
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 10
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 3.831067239,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 1.476548896,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 0.892438929,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 0.698631743,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 0.735412381,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 0.673681247,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 10
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 10
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 9
+    },
+    {
+      "image_size": 800,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 10
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 15.245906756,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 5.42844172,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 3.567673429,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 3.209998668,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 3.188453038,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 3.056772247,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 40
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 39
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 39
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 40
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 15.245058796,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 5.482997483,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 3.559103222,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 3.233340956,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 3.273418555,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 3.115360495,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 39
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 39
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 39
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 40
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 15.857870543,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 5.62240409,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 3.565210813,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 3.271108996,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 3.321082347,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 3.169444184,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 40
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 40
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 40
+    },
+    {
+      "image_size": 1600,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 41
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 59.691259452,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 22.950271083,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 15.798350091,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 12.787721954,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 12.595009148,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 12.339429946,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 161
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 160
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 160
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 167
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 60.812661708,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 22.003992046,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 15.911524524,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 13.332021301,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 13.272920561,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 12.438631255,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 161
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 168
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 161
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 169
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 59.987782799,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 22.431416745,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 16.207037493,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 13.139611885,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 13.166327558,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 12.50919477,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 163
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 163
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 162
+    },
+    {
+      "image_size": 3200,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 169
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 234.027126125,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 91.891698122,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 62.859024231,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 51.77767714,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 51.897694855,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 48.987751442,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 646
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 644
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 672
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 696
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 238.79177709,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 93.878300054,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 63.244169751,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 52.397066701,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 50.878495292,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 50.342434025,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 648
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 646
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 673
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 678
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 244.431078293,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 94.017060351,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 65.131233211,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 53.921569126,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 54.171019422,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 50.601472795,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 653
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 652
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 649
+    },
+    {
+      "image_size": 6400,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 690
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 369.295759893,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 144.621936614,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 100.064645115,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 82.153936601,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 79.856100614,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 76.452533434,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 1007
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 1004
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 1052
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 3,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 1055
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 370.995221383,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 146.006866155,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 100.178235168,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 83.370952752,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 80.825264162,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 77.081133891,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 1009
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 1058
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 1005
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 5,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 1065
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvSeqDumb",
+      "n_jobs": 1,
+      "tile_size": -1,
+      "python_seconds": 374.03590985,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 4,
+      "tile_size": -1,
+      "python_seconds": 147.463894907,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 8,
+      "tile_size": -1,
+      "python_seconds": 99.86919165,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 12,
+      "tile_size": -1,
+      "python_seconds": 84.559096895,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 16,
+      "tile_size": -1,
+      "python_seconds": 80.120181502,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "ConvParallelAdvancedDumb",
+      "n_jobs": 20,
+      "tile_size": -1,
+      "python_seconds": 78.357784921,
+      "cuda_ms": -1
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 8,
+      "python_seconds": -1.0,
+      "cuda_ms": 1015
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 16,
+      "python_seconds": -1.0,
+      "cuda_ms": 1012
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 24,
+      "python_seconds": -1.0,
+      "cuda_ms": 1011
+    },
+    {
+      "image_size": 8000,
+      "kernel_size": 7,
+      "py_module": "CUDA",
+      "n_jobs": 1,
+      "tile_size": 32,
+      "python_seconds": -1.0,
+      "cuda_ms": 1073
+    }
+  ]
+}

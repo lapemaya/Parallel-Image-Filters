@@ -19,7 +19,7 @@ if [[ -z "${PYTHON_BIN:-}" ]]; then
 fi
 
 # Default to ConvSeq (no multiprocessing noise).
-PY_MODULES=( "ConvSeqDumb" "ConvParallelAdvancedDumb")  # Test optimized and classic implementations
+PY_MODULES=( )  # Test optimized and classic implementations
 CUDA_EXE="${CUDA_EXE:-$ROOT_DIR/build/CudaConv}"
 OUT_CSV="${OUT_CSV:-}"  # if set, also write CSV to file
 OUT_JSON="${OUT_JSON:-benchmark_results.json}"  # JSON output file
@@ -27,12 +27,12 @@ OUT_JSON="${OUT_JSON:-benchmark_results.json}"  # JSON output file
 SIZES=(800 1600 3200 6400 8000)
 KERNELS=(3 5 7)
 N_JOBS_LIST=(4 8 12 16 20)  # Number of processes for parallel implementations
-TILE_SIZES=(8 16 24)  # Tile sizes for CUDA (reduced to avoid configuration errors)
+TILE_SIZES=(8 16 24 32)  # Tile sizes for CUDA (reduced to avoid configuration errors)
 
 if [[ "${1:-}" == "--quick" ]]; then
   SIZES=(50)
-  N_JOBS_LIST=(4)
-  TILE_SIZES=(16)
+  N_JOBS_LIST=(4 8 12 16 20)
+  TILE_SIZES=(8 16 24) 
 fi
 
 mkdir -p "$ROOT_DIR/benchmark_images"

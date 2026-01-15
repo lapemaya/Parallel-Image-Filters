@@ -1,0 +1,192 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+\title{CUDA Speedup Analysis}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{CUDA Speedup vs Sequential CPU}
+\noindent Speedup computed as: $S = \frac{T_{\text{sequential CPU}}}{T_{\text{CUDA}}}$
+
+\noindent Performance measured at different tile sizes for shared memory optimization.
+
+\subsection{Kernel Size: 3×3}
+\begin{table}[h]
+\centering
+\caption{CUDA Speedup for kernel 3×3 at different image sizes and tile sizes}
+\label{tab:cuda_speedup_k3}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Image Size} & \textbf{tile=8} & \textbf{tile=16} & \textbf{tile=24} & \textbf{tile=32} \\
+\midrule
+800×800 & \cellcolor{green!30}\textbf{424.9×} & \cellcolor{green!30}\textbf{424.9×} & \cellcolor{green!30}\textbf{424.9×} & \cellcolor{green!30}\textbf{382.4×} \\
+1600×1600 & \cellcolor{green!30}\textbf{381.1×} & \cellcolor{green!30}\textbf{390.9×} & \cellcolor{green!30}\textbf{390.9×} & \cellcolor{green!30}\textbf{381.1×} \\
+3200×3200 & \cellcolor{green!30}\textbf{370.8×} & \cellcolor{green!30}\textbf{373.1×} & \cellcolor{green!30}\textbf{373.1×} & \cellcolor{green!30}\textbf{357.4×} \\
+6400×6400 & \cellcolor{green!30}\textbf{362.3×} & \cellcolor{green!30}\textbf{363.4×} & \cellcolor{green!30}\textbf{348.3×} & \cellcolor{green!30}\textbf{336.2×} \\
+8000×8000 & \cellcolor{green!30}\textbf{366.7×} & \cellcolor{green!30}\textbf{367.8×} & \cellcolor{green!30}\textbf{351.0×} & \cellcolor{green!30}\textbf{350.0×} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{CUDA Execution Time for Kernel 3×3}
+\begin{table}[h]
+\centering
+\caption{CUDA execution time (milliseconds) for kernel 3×3}
+\label{tab:cuda_time_k3}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Image Size} & \textbf{tile=8} & \textbf{tile=16} & \textbf{tile=24} & \textbf{tile=32} \\
+\midrule
+800×800 & \cellcolor{green!20}9.00 & \cellcolor{green!20}9.00 & \cellcolor{green!20}9.00 & 10.00 \\
+1600×1600 & 40.00 & 39.00 & 39.00 & 40.00 \\
+3200×3200 & 161.0 & 160.0 & 160.0 & 167.0 \\
+6400×6400 & 646.0 & 644.0 & 672.0 & 696.0 \\
+8000×8000 & 1007.0 & 1004.0 & 1052.0 & 1055.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\subsection{Kernel Size: 5×5}
+\begin{table}[h]
+\centering
+\caption{CUDA Speedup for kernel 5×5 at different image sizes and tile sizes}
+\label{tab:cuda_speedup_k5}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Image Size} & \textbf{tile=8} & \textbf{tile=16} & \textbf{tile=24} & \textbf{tile=32} \\
+\midrule
+800×800 & \cellcolor{green!30}\textbf{438.4×} & \cellcolor{green!30}\textbf{394.6×} & \cellcolor{green!30}\textbf{438.4×} & \cellcolor{green!30}\textbf{394.6×} \\
+1600×1600 & \cellcolor{green!30}\textbf{390.9×} & \cellcolor{green!30}\textbf{390.9×} & \cellcolor{green!30}\textbf{390.9×} & \cellcolor{green!30}\textbf{381.1×} \\
+3200×3200 & \cellcolor{green!30}\textbf{377.7×} & \cellcolor{green!30}\textbf{362.0×} & \cellcolor{green!30}\textbf{377.7×} & \cellcolor{green!30}\textbf{359.8×} \\
+6400×6400 & \cellcolor{green!30}\textbf{368.5×} & \cellcolor{green!30}\textbf{369.6×} & \cellcolor{green!30}\textbf{354.8×} & \cellcolor{green!30}\textbf{352.2×} \\
+8000×8000 & \cellcolor{green!30}\textbf{367.7×} & \cellcolor{green!30}\textbf{350.7×} & \cellcolor{green!30}\textbf{369.1×} & \cellcolor{green!30}\textbf{348.4×} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{CUDA Execution Time for Kernel 5×5}
+\begin{table}[h]
+\centering
+\caption{CUDA execution time (milliseconds) for kernel 5×5}
+\label{tab:cuda_time_k5}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Image Size} & \textbf{tile=8} & \textbf{tile=16} & \textbf{tile=24} & \textbf{tile=32} \\
+\midrule
+800×800 & \cellcolor{green!20}9.00 & 10.00 & \cellcolor{green!20}9.00 & 10.00 \\
+1600×1600 & 39.00 & 39.00 & 39.00 & 40.00 \\
+3200×3200 & 161.0 & 168.0 & 161.0 & 169.0 \\
+6400×6400 & 648.0 & 646.0 & 673.0 & 678.0 \\
+8000×8000 & 1009.0 & 1058.0 & 1005.0 & 1065.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\subsection{Kernel Size: 7×7}
+\begin{table}[h]
+\centering
+\caption{CUDA Speedup for kernel 7×7 at different image sizes and tile sizes}
+\label{tab:cuda_speedup_k7}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Image Size} & \textbf{tile=8} & \textbf{tile=16} & \textbf{tile=24} & \textbf{tile=32} \\
+\midrule
+800×800 & \cellcolor{green!30}\textbf{383.1×} & \cellcolor{green!30}\textbf{383.1×} & \cellcolor{green!30}\textbf{425.7×} & \cellcolor{green!30}\textbf{383.1×} \\
+1600×1600 & \cellcolor{green!30}\textbf{396.4×} & \cellcolor{green!30}\textbf{396.4×} & \cellcolor{green!30}\textbf{396.4×} & \cellcolor{green!30}\textbf{386.8×} \\
+3200×3200 & \cellcolor{green!30}\textbf{368.0×} & \cellcolor{green!30}\textbf{368.0×} & \cellcolor{green!30}\textbf{370.3×} & \cellcolor{green!30}\textbf{355.0×} \\
+6400×6400 & \cellcolor{green!30}\textbf{374.3×} & \cellcolor{green!30}\textbf{374.9×} & \cellcolor{green!30}\textbf{376.6×} & \cellcolor{green!30}\textbf{354.2×} \\
+8000×8000 & \cellcolor{green!30}\textbf{368.5×} & \cellcolor{green!30}\textbf{369.6×} & \cellcolor{green!30}\textbf{370.0×} & \cellcolor{green!30}\textbf{348.6×} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{CUDA Execution Time for Kernel 7×7}
+\begin{table}[h]
+\centering
+\caption{CUDA execution time (milliseconds) for kernel 7×7}
+\label{tab:cuda_time_k7}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Image Size} & \textbf{tile=8} & \textbf{tile=16} & \textbf{tile=24} & \textbf{tile=32} \\
+\midrule
+800×800 & 10.00 & 10.00 & \cellcolor{green!20}9.00 & 10.00 \\
+1600×1600 & 40.00 & 40.00 & 40.00 & 41.00 \\
+3200×3200 & 163.0 & 163.0 & 162.0 & 169.0 \\
+6400×6400 & 653.0 & 652.0 & 649.0 & 690.0 \\
+8000×8000 & 1015.0 & 1012.0 & 1011.0 & 1073.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\section{Summary}
+\begin{itemize}
+\item \colorbox{green!30}{Dark Green}: Very high speedup (≥100×)
+\item \colorbox{green!15}{Light Green}: High speedup (50-100×)
+\item \colorbox{yellow!20}{Yellow}: Moderate speedup (10-50×)
+\item No color: Lower speedup (<10×)
+\end{itemize}
+
+\noindent \textbf{Key Observations:}
+\begin{itemize}
+\item CUDA provides substantial speedup over sequential CPU, especially for larger images
+\item Tile size affects shared memory utilization and occupancy
+\item Performance variation with tile size indicates memory access patterns and cache behavior
+\item Larger images benefit more from GPU parallelization due to better amortization of overhead
+\end{itemize}
+
+\subsection{Tile Size Sensitivity}
+\noindent The following table shows the performance variation across tile sizes:
+
+\begin{table}[h]
+\centering
+\caption{Speedup variation with tile size (\%)}
+\label{tab:tile_sensitivity}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Kernel Size} & \textbf{Avg. Speedup} & \textbf{Tile Sensitivity} \\
+\midrule
+3×3 & 376.1× & 26.4\% \\
+5×5 & 378.9× & 25.9\% \\
+7×7 & 377.5× & 22.1\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent \textbf{Note:} Low tile sensitivity indicates that performance is not heavily bottlenecked by shared memory configuration, possibly dominated by memory transfers or compute intensity.
+
+\subsection{Normalized Performance: Time per MAC}
+\noindent This metric normalizes execution time by the number of multiply-accumulate operations, providing insight into how efficiently the hardware is utilized regardless of problem size.
+
+\begin{table}[h]
+\centering
+\caption{Time per MAC (nanoseconds) for CUDA - Best tile size}
+\label{tab:cuda_time_per_mac}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Image Size} & \textbf{K=3} & \textbf{K=5} & \textbf{K=7} \\
+\midrule
+800×800 & 0.5208 & 0.1875 & 0.0957 \\
+1600×1600 & 0.5642 & 0.2031 & 0.1063 \\
+3200×3200 & 0.5787 & 0.2096 & 0.1076 \\
+6400×6400 & 0.5823 & 0.2103 & 0.1078 \\
+8000×8000 & 0.5810 & 0.2094 & 0.1075 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent \textbf{Observation:} If time/MAC is relatively constant across kernel sizes, it suggests the implementation scales well with computational intensity. Variations may indicate different bottlenecks (memory vs compute) for different kernel sizes.
+
+\end{document}
