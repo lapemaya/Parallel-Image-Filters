@@ -2,7 +2,7 @@
 
 An educational image convolution library demonstrating naive and optimized implementations for 2D convolution operations on RGB images. The project compares sequential and parallel approaches in Python alongside a highly-optimized GPU implementation in CUDA.
 
-This work presents a comparative analysis showing speedup from ~5× for naive CPU parallelization to over 370× for GPU acceleration on large images.
+This work presents a comparative analysis showing speedup from ~5× for naive CPU parallelization to over 380× for GPU acceleration on large images.
 
 ## Overview
 
@@ -34,12 +34,17 @@ This project implements 2D image convolution with the following approaches:
 │   ├── benchmark_results.json      # Raw benchmark data
 │   ├── speedup_results.json        # Computed speedup metrics
 │   ├── compute_speedup.py          # Speedup computation script
-│   ├── report.tex                  # Detailed technical report
-│   └── *.py                        # Table generation scripts
+│   ├── generate_all_plot.py        # Plotting generation script
+│   └── plots/                      # Generated performance plots
+├── build/                          # CMake build directory (generated)
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles/
+│   └── CudaConv                    # Compiled CUDA executable
+├── doc/                            # Documentation resources
 ├── CMakeLists.txt                  # Build configuration for CUDA
 ├── benchmark.sh                    # Automated benchmark script
-├── place.png, bear.png, banana.png # Test images
-└── README.md
+├── check_occupancy.py              # CUDA occupancy analysis tool
+└── README.md                       # This file
 ```
 
 ## Implementations
@@ -53,11 +58,6 @@ Simple triple-loop implementation over image rows, columns and kernel entries. G
 - Direct pixel-by-pixel computation
 - Minimal memory optimization
 - Educational reference implementation
-
-**Usage:**
-```bash
-python ConvolutionScripts/ConvSeqDumb.py --input place.png --kernel gaussian
-```
 
 ### 2. CPU Parallel Naive Implementation (ConvParallelAdvancedDumb.py)
 
@@ -74,11 +74,6 @@ Divides the image into blocks and parallelizes across processes using multiproce
 - Simultaneous parallelism on both color channels (R, G, B) and spatial blocks
 - Each process handles one block of one channel independently
 - Load balancing across available cores
-
-**Usage:**
-```bash
-python ConvolutionScripts/ConvParallelAdvancedDumb.py --input place.png --kernel gaussian --n_jobs 4
-```
 
 ### 3. CUDA GPU Implementation (CudaConv.cu)
 
@@ -113,7 +108,6 @@ make
 
 # Run
 ./CudaConv [image_path]
-./CudaConv place.png
 ```
 
 **Configuration parameters (in CudaConv.cu):**
@@ -150,11 +144,11 @@ Performance measured on various image sizes (800×800 to 8000×8000 pixels) with
 #### Sequential Implementation - Absolute Times
 | Image Size | K=3×3 | K=5×5 | K=7×7 |
 |------------|-------|-------|-------|
-| 800×800 | 3.82s | 3.94s | 3.83s |
-| 1600×1600 | 15.26s | 15.26s | 15.86s |
-| 3200×3200 | 59.48s | 60.80s | 60.00s |
-| 6400×6400 | 234.06s | 238.84s | 244.38s |
-| 8000×8000 | 369.10s | 370.77s | 373.99s |
+| 800×800 | 3.82s | 3.95s | 3.83s |
+| 1600×1600 | 15.25s | 15.25s | 15.86s |
+| 3200×3200 | 59.69s | 60.81s | 59.99s |
+| 6400×6400 | 234.03s | 238.79s | 244.43s |
+| 8000×8000 | 369.30s | 371.00s | 374.04s |
 
 #### CPU Parallel - Best Speedup (vs Sequential)
 | Image Size | K=3×3 (20 jobs) | K=5×5 (20 jobs) | K=7×7 (20 jobs) |
@@ -172,7 +166,7 @@ Performance measured on various image sizes (800×800 to 8000×8000 pixels) with
 - Speedup plateaus beyond 12 processes
 
 #### CUDA GPU - Best Speedup (vs Sequential)
-| Image Size | K=3×3 (tile=8/16) | K=5×5 (tile=8) | K=7×7 (tile=24) |
+| Image Size | K=3×3 (tile=8/16) | K=5×5 (tile=8/16) | K=7×7 (tile=24) |
 |------------|-------------------|----------------|-----------------|
 | 800×800 | **424.9×** (9ms) | **438.4×** (9ms) | **425.7×** (9ms) |
 | 1600×1600 | **390.9×** (39ms) | **390.9×** (39ms) | **396.4×** (40ms) |
@@ -252,10 +246,10 @@ Normalized performance metric showing efficiency per operation:
 ### Python Scripts
 ```bash
 # Sequential (naive)
-python ConvolutionScripts/ConvSeqDumb.py --input place.png --kernel gaussian
+python ConvolutionScripts/ConvSeqDumb.py --input [image_path] --kernel gaussian
 
 # Parallel CPU (naive)
-python ConvolutionScripts/ConvParallelAdvancedDumb.py --input place.png --kernel gaussian --n_jobs 4
+python ConvolutionScripts/ConvParallelAdvancedDumb.py --input [image_path] --kernel gaussian --n_jobs 4
 ```
 
 ### CUDA Program
@@ -264,7 +258,7 @@ mkdir build
 cd build
 cmake ..
 make
-./CudaConv ../place.png
+./CudaConv ../[image_path]
 ```
 
 ## Kernel Presets
@@ -316,7 +310,7 @@ For a detailed technical analysis including:
 - Comprehensive performance analysis with statistical metrics
 - Architectural considerations for CPU and GPU implementations
 
-Please refer to `AnalyseResults/report.tex` (LaTeX source) which contains the full academic report of this work.
+Please refer to [doc/Report_Conv_Filt_Chiostrini_Cappetti.pdf](doc/Report_Conv_Filt_Chiostrini_Cappetti.pdf) which contains the full academic report of this work.
 
 ## Notes
 
