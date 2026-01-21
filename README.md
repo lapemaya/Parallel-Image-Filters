@@ -110,6 +110,14 @@ make
 ./CudaConv [image_path]
 ```
 
+*Start the benchmark*
+```bash
+./benchmark.sh  2>/dev/null
+
+or
+
+./benchmark.sh   2>/dev/null --quick
+```
 **Configuration parameters (in CudaConv.cu):**
 - `K`: Kernel size (3, 5, or 7 for optimized template path)
 - `tileSize`: Output tile size per block (default: 16, recommended: 8-24)

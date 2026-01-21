@@ -19,10 +19,11 @@ if [[ -z "${PYTHON_BIN:-}" ]]; then
 fi
 
 # Default to ConvSeq (no multiprocessing noise).
-PY_MODULES=( )  # Test optimized and classic implementations
+PY_MODULES=( "ConvolutionScripts.ConvParallelAdvancedDumb" "ConvolutionScripts.ConvSeqDumb" )  # Test optimized and classic implementations
 CUDA_EXE="${CUDA_EXE:-$ROOT_DIR/build/CudaConv}"
 OUT_CSV="${OUT_CSV:-}"  # if set, also write CSV to file
 OUT_JSON="${OUT_JSON:-benchmark_results.json}"  # JSON output file
+SILENT_CSV="${SILENT_CSV:-false}"  # if true, don't print CSV to stdout
 
 SIZES=(800 1600 3200 6400 8000)
 KERNELS=(3 5 7)
@@ -77,8 +78,15 @@ import os
 import numpy as np
 from PIL import Image
 import importlib
+import multiprocessing
 
 if __name__ == '__main__':
+    # Set multiprocessing start method to avoid ChildProcessError
+    try:
+        multiprocessing.set_start_method('spawn', force=True)
+    except RuntimeError:
+        pass  # already set
+
     # Add current directory to Python path
     sys.path.insert(0, os.getcwd())
 
@@ -162,7 +170,9 @@ cuda_time_ms() {
 
 emit() {
   local line="$1"
-  echo "$line"
+  if [[ "$SILENT_CSV" != "true" ]]; then
+    echo "$line"
+  fi
   if [[ -n "$OUT_CSV" ]]; then
     echo "$line" >>"$OUT_CSV"
   fi
